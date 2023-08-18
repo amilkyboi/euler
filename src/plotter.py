@@ -32,21 +32,21 @@ plt.ylabel('Residual')
 plt.legend()
 plt.show()
 
-x = []
-y1 = []
-y2 = []
+# x = []
+# y1 = []
+# y2 = []
 
-with open('../data/force.csv', 'r', encoding='UTF-8') as csvfile:
-    lines = csv.reader(csvfile, delimiter=',')
-    for row in lines:
-        x.append(float(row[0]))
-        y1.append(float(row[1]))
-        y2.append(float(row[2]))
+# with open('../data/force.csv', 'r', encoding='UTF-8') as csvfile:
+#     lines = csv.reader(csvfile, delimiter=',')
+#     for row in lines:
+#         x.append(float(row[0]))
+#         y1.append(float(row[1]))
+#         y2.append(float(row[2]))
 
-plt.plot(x, y1, label='$F_x$')
-plt.plot(x, y2, label='$F_y$')
-plt.title('Force on Lower Bump')
-plt.xlabel('$x$-Direction Location')
-plt.ylabel('Force')
-plt.legend()
-plt.show()
+# plt.plot(x, y1, label='$F_x$')
+# plt.plot(x, y2, label='$F_y$')
+# plt.title('Force on Lower Bump')
+# plt.xlabel('$x$-Direction Location')
+# plt.ylabel('Force')
+# plt.legend()
+# plt.show()

@@ -71,13 +71,14 @@ subroutine bcinout()
     do jc = -1, jc_max + 2
         ! outlet boundary conditions
         ! 1. static pressure at i = i_max
-        if (mach(ic_max, jc) >= 1.0_wp) then
-            ! supersonic case
-            p(ic_max, jc) = p(ic_max-1, jc)
-        else
-            ! subsonic case
-            p(ic_max, jc) = p_inf
-        end if
+        p(ic_max, jc) = p(ic_max-1, jc)
+        ! if (mach(ic_max, jc) >= 1.0_wp) then
+        !     ! supersonic case
+        !     p(ic_max, jc) = p(ic_max-1, jc)
+        ! else
+        !     ! subsonic case
+        !     p(ic_max, jc) = p_inf
+        ! end if
 
         ! 2. entropy at i = i_max
         s(ic_max, jc) = s(ic_max-1, jc)

@@ -4,14 +4,16 @@ module input
 
     ! All relevant input parameters specified by the user.
 
+    ! Mach 0.7: nu2 = 0.08, nu4 = 0.004
+
     ! freestream mach number
     real(wp), parameter :: mach_inf = 0.7_wp
     ! maximum number of RK4 iterations
-    integer, parameter :: n_iter = 15000
+    integer, parameter :: n_iter = 5000
     ! second-order switch magnitude
-    real(wp), parameter :: nu2 = 0.2_wp
+    real(wp), parameter :: nu2 = 0.08_wp
     ! fourth-order switch magnitude
-    real(wp), parameter :: nu4 = 0.004_wp
+    real(wp), parameter :: nu4 = 0.003_wp
     ! Courant–Friedrichs–Lewy number
     real(wp), parameter :: cfl = 0.5_wp
     ! output file name for saving plots

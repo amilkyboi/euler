@@ -4,8 +4,8 @@ program main
     implicit none
 
     n_max  = 100000
-    in_max = 51
-    jn_max = 11
+    in_max = 101
+    jn_max = 21
     tol    = 10.0**(-10.0)
 
     allocate(xn(in_max, jn_max), yn(in_max, jn_max), xi(in_max, jn_max), et(in_max, jn_max))
