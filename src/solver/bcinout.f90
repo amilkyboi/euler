@@ -13,6 +13,8 @@ subroutine bcinout()
     ! Applies inlet and outlet boundary conditions to the state vector at ic = 1, and i = ic_max
     ! respectively. 
 
+    integer :: k
+
     real(wp) :: riem1, riem2_1, riem2_2, alpha_inlet, p0_inf, T0_inf, T_inf
 
     ! inlet boundary conditions
@@ -71,14 +73,17 @@ subroutine bcinout()
     do jc = -1, jc_max + 2
         ! outlet boundary conditions
         ! 1. static pressure at i = i_max
-        p(ic_max, jc) = p(ic_max-1, jc)
-        ! if (mach(ic_max, jc) >= 1.0_wp) then
-        !     ! supersonic case
-        !     p(ic_max, jc) = p(ic_max-1, jc)
-        ! else
-        !     ! subsonic case
-        !     p(ic_max, jc) = p_inf
-        ! end if
+        if (mach(ic_max, jc) >= 0.1_wp) then
+            ! supersonic case
+            p(ic_max, jc) = p(ic_max - 1, jc)
+
+            q(ic_max + 1, jc, 4) = p(ic_max, jc) / gammam1 + 0.5 * q(ic_max + 1, jc, 1) * vel(ic_max + 1, jc)**2
+        else
+            ! subsonic case
+            p(ic_max, jc) = 0.1 * p_inf
+
+            q(ic_max + 1, jc, 4) = (0.1 * p_inf) / gammam1 + 0.5 * q(ic_max + 1, jc, 1) * vel(ic_max + 1, jc)**2
+        end if
 
         ! 2. entropy at i = i_max
         s(ic_max, jc) = s(ic_max-1, jc)
@@ -102,6 +107,10 @@ subroutine bcinout()
         q(ic_max, jc, 2) = r(ic_max, jc) * u(ic_max, jc)
         q(ic_max, jc, 3) = r(ic_max, jc) * v(ic_max, jc)
         q(ic_max, jc, 4) = r(ic_max, jc) * E(ic_max, jc)
+
+        do k = 1, 3
+            q(ic_max + 1, jc, k) = 2 * q(ic_max, jc, k) - q(ic_max - 1, jc, k)
+        end do
     end do
 
 end subroutine bcinout

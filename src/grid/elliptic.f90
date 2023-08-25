@@ -1,24 +1,24 @@
 subroutine elliptic()
     use mod_types, only: wp => dp
-    use gridprop, only: fn_bounds, xy_bounds, yn_min, yn_max, fn_beg, fn_end, xn, yn, xi, et, &
-                        in, jn, in_max, jn_max, n_max, tol, start, end
+    use gridprop,  only: xn, yn, xi, et, in, jn, yn_min, yn_max, fn_beg, fn_end, start, end, rate
+    use input,     only: max_iter, in_max, jn_max, tol, y_bounds, fn_bounds, save_elp, elp_path
     use functions
     implicit none
 
-    integer :: min_l, min_r
-    integer :: n
+    integer(wp) :: min_l, min_r, n
 
     real(wp), allocatable :: dist_l(:), dist_r(:), xn_new(:, :), yn_new(:, :)
     real(wp) :: alp, bet, gam, d_xi, d_et, e_x, e_y
 
-    call cpu_time(start)
+    call system_clock(start, rate)
 
     allocate(dist_l(in_max), dist_r(in_max), xn_new(in_max, jn_max), yn_new(in_max, jn_max))
 
     fn_beg = fn_bounds(1)
     fn_end = fn_bounds(2)
-    yn_min = xy_bounds(3)
-    yn_max = xy_bounds(4)
+
+    yn_min = y_bounds(1)
+    yn_max = y_bounds(2)
 
     ! Determine the step size in the xi and et directions
     d_xi = xi(2, 1) - xi(1, 1)
@@ -26,15 +26,19 @@ subroutine elliptic()
 
     xn_new = xn
     yn_new = yn
-    do n = 1, n_max
+
+    do n = 1, max_iter
         do in = 2, in_max-1
             do jn = 2, jn_max-1
-                alp = (1/(4*d_et**2))*((xn(in, jn+1) - xn(in, jn-1))**2 + (yn(in, jn+1) - yn(in, jn-1))**2)
+                alp = (1/(4*d_et**2))*((xn(in, jn+1) - xn(in, jn-1))**2 + &
+                           (yn(in, jn+1) - yn(in, jn-1))**2)
 
-                bet = (1/(4*d_xi*d_et))*((xn(in+1, jn) - xn(in-1, jn))*(xn(in, jn+1) - xn(in, jn-1)) + &
-                      (yn(in+1, jn) - yn(in-1, jn))*(yn(in, jn+1) - yn(in, jn-1)))
+                bet = (1/(4*d_xi*d_et))*((xn(in+1, jn) - xn(in-1, jn))*(xn(in, jn+1) - &
+                xn(in, jn-1)) + &
+                (yn(in+1, jn) - yn(in-1, jn))*(yn(in, jn+1) - yn(in, jn-1)))
 
-                gam = (1/(4*d_xi**2))*((xn(in+1, jn) - xn(in-1,jn))**2 + (yn(in+1, jn) - yn(in-1, jn))**2)
+                gam = (1/(4*d_xi**2))*((xn(in+1, jn) - xn(in-1, jn))**2 + &
+                                    (yn(in+1, jn) - yn(in-1, jn))**2)
 
                 ! Calculate new (xn, yn) points using the Gauss-Seidel method
                 xn_new(in, jn) = ((d_xi**2*d_et**2)/(2*(d_xi**2*gam + d_et**2*alp)))* &
@@ -48,7 +52,7 @@ subroutine elliptic()
                                 (gam/d_et**2)*(yn(in, jn+1) + yn(in, jn-1)))
             end do
             ! Apply Neumann boundary conditions
-            if ((xn(in, 1) <= fn_beg) .or. (xn(in, 1) >= fn_end)) then
+            if ((xn(in, 1) < fn_beg) .or. (xn(in, 1) > fn_end)) then
                 ! Ensures that the slope of the functions is considered outside of where the
                 ! functions are actually applied. If this is not done, the grid squares near the
                 ! beginning and end of the bumps are distorted and not squarelike. The yn direction
@@ -105,12 +109,14 @@ subroutine elliptic()
     xn(min_r, 1) = fn_end
     yn(min_r, 1) = yn_min
 
-    open (8, file='../../data/xyelliptic.x')
-    write(8,*) in_max, jn_max
-    write(8,*) ((xn(in,jn), in=1,in_max), jn=1,jn_max), ((yn(in,jn), in=1,in_max), jn=1,jn_max)
-    close(8)
+    if (save_elp) then
+        open (8, file=elp_path)
+        write(8,*) in_max, jn_max
+        write(8,*) ((xn(in,jn), in=1,in_max), jn=1,jn_max), ((yn(in,jn), in=1,in_max), jn=1,jn_max)
+        close(8)
+    end if
 
-    call cpu_time(end)
-    print *, 'subroutine elliptic took ', end - start, ' seconds'
+    call system_clock(end)
+    print *, 'subroutine elliptic took ', (end - start) / rate, ' seconds'
 
 end subroutine elliptic

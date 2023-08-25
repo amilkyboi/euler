@@ -40,10 +40,10 @@ subroutine ghost()
     end do
 
     ! write the extended grid to a separate output file for verification
-    open (8, file='../../data/xyghost.x')
-    write(8,*) in_max+4, jn_max+4
-    write(8,*) ((xn(in,jn), in=-1,in_max+2), jn=-1,jn_max+2), ((yn(in,jn), in=-1,in_max+2), jn=-1,jn_max+2)
-    close(8)
+    ! open (8, file='../../data/xyghost.x')
+    ! write(8,*) in_max+4, jn_max+4
+    ! write(8,*) ((xn(in,jn), in=-1,in_max+2), jn=-1,jn_max+2), ((yn(in,jn), in=-1,in_max+2), jn=-1,jn_max+2)
+    ! close(8)
 
     call cpu_time(end)
     print *, 'subroutine ghost took ', end - start, ' seconds'

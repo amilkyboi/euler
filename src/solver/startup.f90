@@ -8,7 +8,7 @@ subroutine startup()
 
     call cpu_time(start)
 
-    open(8, file='../../data/xyelliptic.x')
+    open(8, file='../../data/xy_elp.x')
     read(8, *) in_max, jn_max
 
     allocate(xn(-1:in_max+2, -1:jn_max+2), yn(-1:in_max+2, -1:jn_max+2))

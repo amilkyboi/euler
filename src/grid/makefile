@@ -13,14 +13,21 @@ RM = rm -rf
 CP = cp -f
 endif
 
-FC = gfortran # name of Fortran compiler
-FFLAGS= -m64 -g -ffpe-trap=invalid,zero -fbacktrace -fdump-core
-LDFLAGS = -m64 -g # -ffpe-trap=invalid,zero -fbacktrace -fdump-core
-EXE = main # name of output .exe
+# debugging flags:
+# -Og -g3 -Wall -Wextra -pedantic -std=f2018 -fimplicit-none -fcheck=all -fbacktrace -ffpe-trap=invalid,zero,underflow,overflow
 
-.SUFFIXES: .f90 .o # valid file suffixes
+# production flags:
+# -O3 -std=f2018
 
-SRC = mod_types.f90 functions.f90 gridprop.f90 algebraic.f90 elliptic.f90 main.f90 # all files $(wildcard *.f90)
+FC      = gfortran
+FFLAGS  = -Og -g3 -Wall -Wextra -pedantic -std=f2018 -fimplicit-none -fcheck=all -fbacktrace -ffpe-trap=invalid,zero,underflow,overflow
+LDFLAGS = -Og -g3 -Wall -Wextra -pedantic -std=f2018 -fimplicit-none -fcheck=all -fbacktrace -ffpe-trap=invalid,zero,underflow,overflow
+EXE     = main
+
+.SUFFIXES: .f90 .o
+
+# all files $(wildcard *.f90)
+SRC = mod_types.f90 input.f90 gridprop.f90 allocate.f90 functions.f90 algebraic.f90 elliptic.f90 main.f90
 
 OBJ = $(SRC:.f90=.o) # compile sources of object files
 

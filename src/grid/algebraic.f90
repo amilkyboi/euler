@@ -1,19 +1,22 @@
 subroutine algebraic()
-    use gridprop, only: fn_beg, fn_end, yn_min, yn_max, fn_bounds, xy_bounds, in, jn, &
-                        in_max, jn_max, xn, yn, xi, et, start, end
+    use mod_types, only: wp => dp
+    use gridprop,  only: xn, yn, xi, et, in, jn, yn_min, yn_max, fn_beg, fn_end, start, end, rate
+    use input,     only: in_max, jn_max, x_bounds, y_bounds, fn_bounds, save_alg, alg_path
     use functions
     implicit none
 
-    integer :: xn_min, xn_max
+    integer(wp) :: xn_min, xn_max
 
-    call cpu_time(start)
+    call system_clock(start, rate)
 
     fn_beg = fn_bounds(1)
     fn_end = fn_bounds(2)
-    xn_min = xy_bounds(1)
-    xn_max = xy_bounds(2)
-    yn_min = xy_bounds(3)
-    yn_max = xy_bounds(4)
+
+    xn_min = x_bounds(1)
+    xn_max = x_bounds(2)
+
+    yn_min = y_bounds(1)
+    yn_max = y_bounds(2)
 
     do in = 1, in_max
         do jn = 1, jn_max
@@ -25,7 +28,7 @@ subroutine algebraic()
             xn(in, jn) = xn_min + xi(in, jn)*(xn_max - xn_min)
 
             ! Determine where the functions defining the top and bottom boundaries apply
-            if ((xn(in, jn) <= fn_beg) .or. (xn(in, jn) >= fn_end)) then
+            if ((xn(in, jn) < fn_beg) .or. (xn(in, jn) > fn_end)) then
                 yn(in, jn) = yn_min + et(in, jn)*(yn_max - yn_min)
             else
                 yn(in, jn) = y_btm(xn(in, jn)) + et(in, jn)*(y_top(xn(in, jn)) - y_btm(xn(in, jn)))
@@ -33,7 +36,14 @@ subroutine algebraic()
         end do
     end do
 
-    call cpu_time(end)
-    print *, 'subroutine algebraic took ', end - start, ' seconds'
+    if (save_alg) then
+        open (8, file=alg_path)
+        write(8,*) in_max, jn_max
+        write(8,*) ((xn(in,jn), in=1,in_max), jn=1,jn_max), ((yn(in,jn), in=1,in_max), jn=1,jn_max)
+        close(8)
+    end if
+
+    call system_clock(end)
+    print *, 'subroutine algebraic took ', (end - start) / rate, ' seconds'
 
 end subroutine algebraic

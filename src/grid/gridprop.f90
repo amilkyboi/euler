@@ -2,8 +2,18 @@ module gridprop
     use mod_types, only: wp => dp
     implicit none
 
-    integer :: in, jn, n_max, in_max, jn_max, xy_bounds(4), fn_bounds(2), yn_min, yn_max, fn_beg, fn_end
+    ! arrays
     real(wp), allocatable :: xn(:, :), yn(:, :), xi(:, :), et(:, :)
-    real(wp) :: start, end, tol
+
+    ! nodes
+    integer(wp) :: in, jn
+    ! domain
+    integer(wp) :: yn_min, yn_max, fn_beg, fn_end
+    ! timing
+    integer(wp) :: start, end
+
+    ! timing
+    real(wp) :: rate
+    
 
 end module gridprop
