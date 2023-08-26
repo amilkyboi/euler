@@ -21,7 +21,7 @@ subroutine rk4()
     allocate(qold(ic_max, jc_max, 4))
 
     a_vals(1) = 0.25_wp
-    a_vals(2) = 0.3333333333333333_wp
+    a_vals(2) = 0.33333333333333333_wp
     a_vals(3) = 0.5_wp
     a_vals(4) = 1.0_wp
 
