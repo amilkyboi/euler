@@ -4,7 +4,7 @@ program main
     call allocate
 
     call algebraic
-    
+
     call elliptic
 
 end program main

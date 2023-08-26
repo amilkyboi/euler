@@ -5,7 +5,7 @@ subroutine ghost()
 
     ! Adds two ghost cells to all four sides of the computational domain.
 
-    call cpu_time(start)
+    call system_clock(start, end)
 
     ! front
     do in = -1, 0
@@ -39,13 +39,7 @@ subroutine ghost()
         end do
     end do
 
-    ! write the extended grid to a separate output file for verification
-    ! open (8, file='../../data/xyghost.x')
-    ! write(8,*) in_max+4, jn_max+4
-    ! write(8,*) ((xn(in,jn), in=-1,in_max+2), jn=-1,jn_max+2), ((yn(in,jn), in=-1,in_max+2), jn=-1,jn_max+2)
-    ! close(8)
-
-    call cpu_time(end)
-    print *, 'subroutine ghost took ', end - start, ' seconds'
+    call system_clock(end)
+    print *, 'subroutine ghost took ', (end - start) / rate, ' seconds'
 
 end subroutine ghost

@@ -5,11 +5,14 @@ subroutine timestep()
     use flowprop,  only: c, u, v
     use input,     only: cfl    
     use functions
+    use timing
     implicit none
 
     ! Calculate the time step needed for the RK4 iterations. Only considers the real cells.
 
     real(wp) :: nn(2), ns(2), ne(2), nw(2), eign, eigs, eige, eigw
+
+    call system_clock(start, rate)
 
     do ic = 1, ic_max
         do jc = 1, jc_max
@@ -29,5 +32,8 @@ subroutine timestep()
     end do
 
     dt_min = cfl * minval(dt)
+
+    call system_clock(end)
+    print *, 'subroutine timestep took ', (end - start) / rate, ' seconds'
 
 end subroutine timestep

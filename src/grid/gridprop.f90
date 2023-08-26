@@ -9,11 +9,5 @@ module gridprop
     integer(wp) :: in, jn
     ! domain
     integer(wp) :: yn_min, yn_max, fn_beg, fn_end
-    ! timing
-    integer(wp) :: start, end
-
-    ! timing
-    real(wp) :: rate
-    
 
 end module gridprop

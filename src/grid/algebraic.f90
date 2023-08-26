@@ -1,8 +1,9 @@
 subroutine algebraic()
     use mod_types, only: wp => dp
-    use gridprop,  only: xn, yn, xi, et, in, jn, yn_min, yn_max, fn_beg, fn_end, start, end, rate
+    use gridprop,  only: xn, yn, xi, et, in, jn, yn_min, yn_max, fn_beg, fn_end
     use input,     only: in_max, jn_max, x_bounds, y_bounds, fn_bounds, save_alg, alg_path
     use functions
+    use timing
     implicit none
 
     integer(wp) :: xn_min, xn_max

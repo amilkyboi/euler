@@ -2,7 +2,10 @@ subroutine allocation()
     use gridprop, only: in_max, jn_max, ic_max, jc_max, ar, alpha, dt
     use flowprop, only: r, u, v, vel, E, T, c, mach, p, s
     use fluxes,   only: q, f, g, res, dis
+    use timing
     implicit none
+
+    call system_clock(start, rate)
 
     ! Allocates all arrays except for xn and yn.
 
@@ -21,4 +24,8 @@ subroutine allocation()
              vel(-1:ic_max+2, -1:jc_max+2), E(-1:ic_max+2, -1:jc_max+2), T(-1:ic_max+2, -1:jc_max+2), &
              c(-1:ic_max+2, -1:jc_max+2), mach(-1:ic_max+2, -1:jc_max+2), p(-1:ic_max+2, -1:jc_max+2), &
              s(-1:ic_max+2, -1:jc_max+2))
+
+    call system_clock(end)
+    print *, 'subroutine allocation took ', (end - start) / rate, ' seconds'
+
 end subroutine allocation

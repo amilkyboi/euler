@@ -6,6 +6,7 @@ subroutine rk4()
     use fluxes,    only: q, res, dis
     use reference, only: l_ref
     use functions
+    use timing
     implicit none
 
     ! Performs numerical integration on the state vector, residual, and dissipation terms using a
@@ -16,6 +17,8 @@ subroutine rk4()
     integer :: iter, nstages, i
     real(wp) :: a_vals(4), err, nn(2)
     real(wp), allocatable :: qold(:, :, :), fp_x(:), fp_y(:)
+
+    call system_clock(start, rate)
 
     allocate(qold(ic_max, jc_max, 4), fp_x(ic_max), fp_y(ic_max))
 
@@ -86,5 +89,8 @@ subroutine rk4()
     end do
 
     close(2)
+
+    call system_clock(end)
+    print *, 'subroutine rk4 took ', (end - start) / rate, ' seconds'
 
 end subroutine rk4

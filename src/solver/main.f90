@@ -1,8 +1,6 @@
 program main
     implicit none
 
-    ! calls all relevant subroutines and executes the Euler solver
-
     call startup
 
     call allocation

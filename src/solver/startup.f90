@@ -6,7 +6,7 @@ subroutine startup()
     ! Reads the data created by the elliptic grid generator, allocates the xn and yn arrays, and
     ! stores grid data inside each vector.
 
-    call cpu_time(start)
+    call system_clock(start, rate)
 
     open(8, file='../../data/xy_elp.x')
     read(8, *) in_max, jn_max
@@ -18,6 +18,7 @@ subroutine startup()
     
     print *, in_max, 'x', jn_max, ' grid'
 
-    call cpu_time(end)
-    print *, 'subroutine startup took ', end - start, ' seconds'
+    call system_clock(end)
+    print *, 'subroutine startup took ', (end - start) / rate, ' seconds'
+
 end subroutine startup

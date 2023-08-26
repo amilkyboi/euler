@@ -11,7 +11,7 @@ subroutine area()
 
     integer :: an(2), bn(2), cn(2), dn(2)
 
-    call cpu_time(start)
+    call system_clock(start, rate)
 
     do ic = 1, ic_max
         do jc = 1, jc_max
@@ -28,7 +28,7 @@ subroutine area()
     ! non-dimensionalize the entire area vector
     ar = ar / l_ref**2
 
-    call cpu_time(end)
-    print *, 'subroutine area took ', end - start, ' seconds'
+    call system_clock(end)
+    print *, 'subroutine area took ', (end - start) / rate, ' seconds'
 
 end subroutine area

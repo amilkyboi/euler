@@ -18,7 +18,7 @@ subroutine initializer()
     integer :: an(2), bn(2), cn(2), dn(2)
     real(wp) :: cnst1, cnst2, mach_temp, alfa
 
-    call cpu_time(start)
+    call system_clock(start, rate)
 
     ! commonly reused constants
     cnst1 = 1.0_wp / (gamma * gammam1)
@@ -73,7 +73,7 @@ subroutine initializer()
         end do
     end do
 
-    call cpu_time(end)
-    print *, 'subroutine initializer took ', end - start, ' seconds'
+    call system_clock(end)
+    print *, 'subroutine initializer took ', (end - start) / rate, ' seconds'
 
 end subroutine initializer
