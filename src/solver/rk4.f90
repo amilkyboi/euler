@@ -16,11 +16,11 @@ subroutine rk4()
 
     integer :: iter, nstages, i
     real(wp) :: a_vals(4), err, nn(2)
-    real(wp), allocatable :: qold(:, :, :), fp_x(:), fp_y(:)
+    real(wp), allocatable :: qold(:, :, :)
 
     call system_clock(start, rate)
 
-    allocate(qold(ic_max, jc_max, 4), fp_x(ic_max), fp_y(ic_max))
+    allocate(qold(ic_max, jc_max, 4))
 
     a_vals(1) = 0.25_wp
     a_vals(2) = 0.3333333333333333_wp
@@ -30,6 +30,8 @@ subroutine rk4()
     nstages = 4
 
     open(1, file=res_str)
+
+    write(1,'(*(g0.15,:,","))') 'iter', 'rho', 'rho_u', 'rho_v', 'rho_e'
 
     call bcinout
     call bcwall
@@ -71,24 +73,6 @@ subroutine rk4()
     call bcwall
 
     close(1)
-
-    open(2, file=frc_str)
-
-    do ic = 1, ic_max
-        if (xn(ic, 1) >= 2.0_wp .and. xn(ic, 1) <= 3.0_wp) then
-            nn = normal(ic, 0, 1) ! upward facing normal from the bottom wall
-
-            ! force due to pressure in x-direction
-            fp_x(ic) = p(ic, 1) * l_ref * length(ic, 1, 2) * nn(1)
-
-            ! force due to pressure in y-direction
-            fp_y(ic) = p(ic, 1) * l_ref * length(ic, 1, 2) * nn(2)
-
-            write(2,'(*(g0.15,:,","))') xn(ic, 1), fp_x(ic), fp_y(ic)
-        end if
-    end do
-
-    close(2)
 
     call system_clock(end)
     print *, 'subroutine rk4 took ', (end - start) / rate, ' seconds'
