@@ -17,7 +17,7 @@ endif
 DBUG_FLAGS = -Og -g3 -Wall -Wextra -pedantic -std=f2018 -fimplicit-none -fcheck=all -fbacktrace -ffpe-trap=invalid,zero,underflow,overflow
 
 # compiler and linker flags used for production
-PROD_FLAGS = -O3 -std=f2018 -fimplicit-none
+PROD_FLAGS = -O3 -std=f2018 -fimplicit-none -ffpe-trap=invalid,zero,underflow,overflow
 
 # specify fortran compiler and executable filename
 FC  = gfortran

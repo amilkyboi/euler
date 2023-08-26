@@ -1,6 +1,6 @@
 module reference
     use mod_types, only: wp => dp
-    use gas_vars,  only: gamma, gammam1
+    use gas_vars,  only: gamma, gamm1
     implicit none
 
     ! Declares all variables that serve as standard reference values for non-dimensionalization and
@@ -15,6 +15,6 @@ module reference
     ! reference speed of sound, m/s
     real(wp), parameter :: a_ref = sqrt(gamma * 287.0_wp * 298.0_wp)
     ! reference specific heat capacity at constant volume, J/(kg*K)
-    real(wp), parameter :: cv_ref = 287.0_wp / gammam1
+    real(wp), parameter :: cv_ref = 287.0_wp / gamm1
 
 end module reference

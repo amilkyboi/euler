@@ -7,15 +7,17 @@ module input
     integer, parameter :: n_iter = 5000
 
     ! freestream mach number
-    real(wp), parameter :: mach_inf = 0.3_wp
+    real(wp), parameter :: mach_inf  = 0.3_wp
     ! second-order switch magnitude
-    real(wp), parameter :: nu2      = 0.0_wp
+    real(wp), parameter :: nu2       = 0.0_wp
     ! fourth-order switch magnitude
-    real(wp), parameter :: nu4      = 0.002_wp
+    real(wp), parameter :: nu4       = 0.002_wp
     ! Courant–Friedrichs–Lewy number
-    real(wp), parameter :: cfl      = 1.0_wp
+    real(wp), parameter :: cfl       = 1.0_wp
     ! exit pressure
-    real(wp), parameter :: p_exit   = 0.1_wp * p_inf
+    real(wp), parameter :: p_exit    = 0.1_wp * p_inf
+    ! inlet angle of attack
+    real(wp), parameter :: inlet_aoa = 0.0_wp
 
     ! output file name for saving plots
     character(len=19), parameter :: plt_str = '../../data/soln.plt'

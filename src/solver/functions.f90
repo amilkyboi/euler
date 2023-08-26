@@ -1,6 +1,6 @@
 module functions
     use mod_types, only: wp => dp
-    use gas_vars,  only: gammam1
+    use gas_vars,  only: gamm1
     use grid_vars, only: xn, yn
     implicit none
 

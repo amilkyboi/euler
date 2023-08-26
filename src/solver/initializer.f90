@@ -1,7 +1,7 @@
 subroutine initializer()
     use mod_types, only: wp => dp
     use flow_vars, only: dens, pres, temp, enrg, vsnd, entr, xvel, yvel, vmag, mach
-    use gas_vars,  only: gamma, gammam1, over_gamma, over_gtgm1
+    use gas_vars,  only: gamma, gamm1, over_gamma, over_gtgm1
     use grid_vars, only: ic_max, jc_max, ic, jc, xn, yn
     use reference, only: a_ref, R_ref, T_ref, cv_ref
     use input,     only: mach_inf
@@ -66,7 +66,7 @@ subroutine initializer()
             temp(ic, jc) = ((enrg(ic, jc) * a_ref**2 - 0.5 * (vmag(ic, jc) * a_ref)**2) / cv_ref) / T_ref
             vsnd(ic, jc) = sqrt(gamma * R_ref * temp(ic, jc) * T_ref) / a_ref
             mach(ic, jc) = vmag(ic, jc) / vsnd(ic, jc)
-            pres(ic, jc) = gammam1 * dens(ic, jc) * (enrg(ic, jc) - 0.5 * vmag(ic, jc)**2)
+            pres(ic, jc) = gamm1 * dens(ic, jc) * (enrg(ic, jc) - 0.5 * vmag(ic, jc)**2)
             entr(ic, jc) = pres(ic, jc) / dens(ic, jc)**gamma
 
             ! f flux

@@ -1,5 +1,4 @@
 subroutine get_area()
-    use mod_types, only: wp => dp
     use grid_vars, only: ic, jc, ic_max, jc_max, xn, yn, area
     use reference, only: l_ref
     use functions

@@ -3,7 +3,7 @@ subroutine bcwall()
     use flow_vars, only: dens, xvel, yvel, vmag, pres, enrg, temp, vsnd, entr, mach
     use reference, only: a_ref, cv_ref, T_ref, R_ref
     use grid_vars, only: ic, ic_max, jc_max
-    use gas_vars,  only: gamma, gammam1
+    use gas_vars,  only: gamma, gamm1
     use flux_vars, only: q
     use functions
     implicit none
@@ -37,7 +37,7 @@ subroutine bcwall()
         temp(ic, 0) = ((enrg(ic, 0) * a_ref**2 - 0.5 * (vmag(ic, 0) * a_ref)**2) / cv_ref) / T_ref
         vsnd(ic, 0) = sqrt(gamma * R_ref * temp(ic, 0) * T_ref) / a_ref
         mach(ic, 0) = vmag(ic, 0) / vsnd(ic, 0)
-        pres(ic, 0) = gammam1 * dens(ic, 0) * (enrg(ic, 0) - 0.5 * vmag(ic, 0)**2)
+        pres(ic, 0) = gamm1 * dens(ic, 0) * (enrg(ic, 0) - 0.5 * vmag(ic, 0)**2)
         entr(ic, 0) = pres(ic, 0) / dens(ic, 0)**gamma
 
         ! second layer of ghost cells on the bottom
@@ -57,7 +57,7 @@ subroutine bcwall()
         temp(ic, -1) = ((enrg(ic, -1) * a_ref**2 - 0.5 * (vmag(ic, -1) * a_ref)**2) / cv_ref) / T_ref
         vsnd(ic, -1) = sqrt(gamma * R_ref * temp(ic, -1) * T_ref) / a_ref
         mach(ic, -1) = vmag(ic, -1) / vsnd(ic, -1)
-        pres(ic, -1) = gammam1 * dens(ic, -1) * (enrg(ic, -1) - 0.5 * vmag(ic, -1)**2)
+        pres(ic, -1) = gamm1 * dens(ic, -1) * (enrg(ic, -1) - 0.5 * vmag(ic, -1)**2)
         entr(ic, -1) = pres(ic, -1) / dens(ic, -1)**gamma
 
         ! bottom facing normal of ghost cells on top wall
@@ -82,7 +82,7 @@ subroutine bcwall()
         temp(ic, jc_max+1) = ((enrg(ic, jc_max+1) * a_ref**2 - 0.5 * (vmag(ic, jc_max+1) * a_ref)**2) / cv_ref) / T_ref
         vsnd(ic, jc_max+1) = sqrt(gamma * R_ref * temp(ic, jc_max+1) * T_ref) / a_ref
         mach(ic, jc_max+1) = vmag(ic, jc_max+1) / vsnd(ic, jc_max+1)
-        pres(ic, jc_max+1) = gammam1 * dens(ic, jc_max+1) * (enrg(ic, jc_max+1) - 0.5 * vmag(ic, jc_max+1)**2)
+        pres(ic, jc_max+1) = gamm1 * dens(ic, jc_max+1) * (enrg(ic, jc_max+1) - 0.5 * vmag(ic, jc_max+1)**2)
         entr(ic, jc_max+1) = pres(ic, jc_max+1) / dens(ic, jc_max+1)**gamma
 
         ! second layer of ghost cells on the top
@@ -102,7 +102,7 @@ subroutine bcwall()
         temp(ic, jc_max+2) = ((enrg(ic, jc_max+2) * a_ref**2 - 0.5 * (vmag(ic, jc_max+2) * a_ref)**2) / cv_ref) / T_ref
         vsnd(ic, jc_max+2) = sqrt(gamma * R_ref * temp(ic, jc_max+2) * T_ref) / a_ref
         mach(ic, jc_max+2) = vmag(ic, jc_max+2) / vsnd(ic, jc_max+2)
-        pres(ic, jc_max+2) = gammam1 * dens(ic, jc_max+2) * (enrg(ic, jc_max+2) - 0.5 * vmag(ic, jc_max+2)**2)
+        pres(ic, jc_max+2) = gamm1 * dens(ic, jc_max+2) * (enrg(ic, jc_max+2) - 0.5 * vmag(ic, jc_max+2)**2)
         entr(ic, jc_max+2) = pres(ic, jc_max+2) / dens(ic, jc_max+2)**gamma
     end do
 end subroutine bcwall

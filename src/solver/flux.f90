@@ -2,7 +2,7 @@ subroutine flux()
     use flow_vars, only: dens, xvel, yvel, enrg, vmag, pres, temp, vsnd, entr, mach
     use reference, only: R_ref, T_ref, a_ref, cv_ref
     use grid_vars, only: ic, jc, ic_max, jc_max
-    use gas_vars,  only: gamma, gammam1
+    use gas_vars,  only: gamma, gamm1
     use flux_vars, only: q, f, g
     implicit none
 
@@ -21,7 +21,7 @@ subroutine flux()
 
             ! other properties follow
             vmag(ic, jc) = sqrt(xvel(ic, jc)**2 + yvel(ic, jc)**2)
-            pres(ic, jc) = gammam1 * dens(ic, jc) * (enrg(ic, jc) - 0.5 * vmag(ic, jc)**2)
+            pres(ic, jc) = gamm1 * dens(ic, jc) * (enrg(ic, jc) - 0.5 * vmag(ic, jc)**2)
             temp(ic, jc) = ((enrg(ic, jc) * a_ref**2 - 0.5 * (vmag(ic, jc) * a_ref)**2) / cv_ref) / T_ref
             vsnd(ic, jc) = sqrt(gamma * R_ref * temp(ic, jc) * T_ref) / a_ref
             entr(ic, jc) = pres(ic, jc) / dens(ic, jc)**gamma
