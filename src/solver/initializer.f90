@@ -1,75 +1,85 @@
 subroutine initializer()
     use mod_types,  only: wp => dp
-    use gridprop,   only: ic_max, jc_max, ic, jc, xn, yn, alpha
-    use flowprop,   only: r, p, T, E, c, s, u, v, vel, mach
+    use gridprop,   only: ic_max, jc_max, ic, jc, xn, yn
+    use flowvars,   only: dens, pres, temp, enrg, vsnd, entr, xvel, yvel, vmag, mach
     use reference,  only: a_ref, R_ref, T_ref, cv_ref
-    use gasprop,    only: gamma, gammam1
+    use gasprop,    only: gamma, gammam1, over_gamma, over_gtgm1
     use input,      only: mach_inf
     use fluxes,     only: q, f, g
     use functions
     use timing
     implicit none
 
-    ! Initializes the state vector and the two flux vectors in each cell. The values are calculated
-    ! based on conservation properties. The initial mach number for each cell is found based on the
-    ! cell's height ratio compared to the inlet cell. This method provides a more accurate first
-    ! guess than initializing the state vector and flux vectors to purely freestream values.
+    ! initializes the state vector and the two flux vectors in each cell
 
-    integer :: an(2), bn(2), cn(2), dn(2)
-    real(wp) :: cnst1, cnst2, mach_temp, alfa
+    integer(wp) :: node_a(2), node_b(2), node_c(2), node_d(2)
+    real(wp) :: mach_continuity, cell_aoa, inlet_height, current_avg_domain_height
 
     call system_clock(start, rate)
 
-    ! commonly reused constants
-    cnst1 = 1.0_wp / (gamma * gammam1)
-    cnst2 = 1.0_wp / gamma
+    ! calculates the height of the inlet
+    inlet_height = yn(1, jc_max) - yn(1, 1)
 
     do ic = -1, ic_max + 2
+        ! iterates along the domain in the x-direction and gets the current average height of the
+        ! domain
+        current_avg_domain_height = 0.5 * ((yn(ic, jc_max) - yn(ic, 1)) + &
+                                           (yn(ic+1, jc_max) - yn(ic+1, 1)))
+
+        ! applies continuity by accelerating the flow when the domain converges
+
+        ! TODO: this assumption only works for a subsonic inlet condition, should make a switch that
+        !       turns it off when mach_inf >= 1.0_wp
+        mach_continuity = mach_inf * inlet_height / current_avg_domain_height
+
         do jc = -1, jc_max + 2
-            ! mach number for each cell based on height ratio
-            mach_temp = mach_inf! * (yn(1, jc_max) - yn(1, 1)) / &
-                                !   (0.5 * ((yn(ic, jc_max) - yn(ic, 1)) + (yn(ic+1, jc_max) - yn(ic+1, 1))))
+            ! convert from cell notation (ic, jc) to node notation (in, jn)
+            node_a = ijcell_to_ijnode(ic, jc, 1)
+            node_b = ijcell_to_ijnode(ic, jc, 2)
+            node_c = ijcell_to_ijnode(ic, jc, 3)
+            node_d = ijcell_to_ijnode(ic, jc, 4)
 
-            an = ijnode(ic, jc, 1)
-            bn = ijnode(ic, jc, 2)
-            cn = ijnode(ic, jc, 3)
-            dn = ijnode(ic, jc, 4)
+            ! angle of attack of each cell, calculated as an average between the slope of the top
+            ! wall and the slope of the bottom wall
+            cell_aoa = atan(0.5 * ((yn(node_d(1), node_d(2)) - yn(node_c(1), node_c(2))) / &
+                                   (xn(node_d(1), node_d(2)) - xn(node_c(1), node_c(2))) + & 
+                                   (yn(node_b(1), node_b(2)) - yn(node_a(1), node_a(2))) / &
+                                   (xn(node_b(1), node_b(2)) - xn(node_a(1), node_a(2)))))
 
-            ! angle of attack of each cell, calculated as an average between top and bottom slopes
-            alpha(ic, jc) = atan(0.5 * ((yn(dn(1), dn(2)) - yn(cn(1), cn(2)))/(xn(dn(1), dn(2)) - xn(cn(1), cn(2))) + & 
-                                        (yn(bn(1), bn(2)) - yn(an(1), an(2)))/(xn(bn(1), bn(2)) - xn(an(1), an(2)))))
-            alfa = alpha(ic, jc)
-
-            ! initialize state vector
+            ! initialize the state vector with non-dimensional freestream values
             q(ic, jc, 1) = 1.0_wp
-            q(ic, jc, 2) = mach_temp * cos(alfa)
-            q(ic, jc, 3) = mach_temp * sin(alfa)
-            q(ic, jc, 4) = cnst1 + 0.5 * mach_temp**2
+            q(ic, jc, 2) = mach_continuity * cos(cell_aoa)
+            q(ic, jc, 3) = mach_continuity * sin(cell_aoa)
+            q(ic, jc, 4) = over_gtgm1 + 0.5 * mach_continuity**2
 
             ! store all relevant flow properties seprately in non-dimensional form
-            ! rho, u, v, vel, E, T, c, mach, p, s
-            r(ic, jc) = q(ic, jc, 1)
-            u(ic, jc) = q(ic, jc, 2) / q(ic, jc, 1)
-            v(ic, jc) = q(ic, jc, 3) / q(ic, jc, 1)
-            E(ic, jc) = q(ic, jc, 4) / q(ic, jc, 1)
+            ! components directly obtainable from the state vector
+            dens(ic, jc) = q(ic, jc, 1)
+            xvel(ic, jc) = q(ic, jc, 2) / q(ic, jc, 1)
+            yvel(ic, jc) = q(ic, jc, 3) / q(ic, jc, 1)
+            enrg(ic, jc) = q(ic, jc, 4) / q(ic, jc, 1)
 
-            vel(ic, jc) = sqrt(u(ic, jc)**2 + v(ic, jc)**2)
-            T(ic, jc) = ((E(ic, jc) * a_ref**2 - 0.5 * (vel(ic, jc) * a_ref)**2) / cv_ref) / T_ref
-            c(ic, jc) = sqrt(gamma * R_ref * T(ic, jc) * T_ref) / a_ref
-            mach(ic, jc) = vel(ic, jc) / c(ic, jc)
-            p(ic, jc) = gammam1 * r(ic, jc) * (E(ic, jc) - 0.5 * vel(ic, jc)**2)
-            s(ic, jc) = p(ic, jc) / r(ic, jc)**gamma
+            ! other useful quantities
+            vmag(ic, jc) = sqrt(xvel(ic, jc)**2 + yvel(ic, jc)**2)
+            temp(ic, jc) = ((enrg(ic, jc) * a_ref**2 - 0.5 * (vmag(ic, jc) * a_ref)**2) / cv_ref) / T_ref
+            vsnd(ic, jc) = sqrt(gamma * R_ref * temp(ic, jc) * T_ref) / a_ref
+            mach(ic, jc) = vmag(ic, jc) / vsnd(ic, jc)
+            pres(ic, jc) = gammam1 * dens(ic, jc) * (enrg(ic, jc) - 0.5 * vmag(ic, jc)**2)
+            entr(ic, jc) = pres(ic, jc) / dens(ic, jc)**gamma
 
-            ! initialize fluxes
-            f(ic, jc, 1) = mach_temp * cos(alfa)
-            f(ic, jc, 2) = (mach_temp * cos(alfa))**2 + cnst2
-            f(ic, jc, 3) = mach_temp**2 * cos(alfa) * sin(alfa)
-            f(ic, jc, 4) = (cnst1 + 0.5 * mach_temp**2 + cnst2)*mach_temp*cos(alfa)
+            ! f flux
+            f(ic, jc, 1) =  mach_continuity * cos(cell_aoa)
+            f(ic, jc, 2) = (mach_continuity * cos(cell_aoa))**2 + over_gamma
+            f(ic, jc, 3) =  mach_continuity**2 * cos(cell_aoa) * sin(cell_aoa)
+            f(ic, jc, 4) = (over_gtgm1 + 0.5 * mach_continuity**2 + over_gamma) * &
+                            mach_continuity * cos(cell_aoa)
 
-            g(ic, jc, 1) = mach_temp * sin(alfa)
-            g(ic, jc, 2) = mach_temp**2 * sin(alfa) * cos(alfa)
-            g(ic, jc, 3) = (mach_temp * sin(alfa))**2 + cnst2
-            g(ic, jc, 4) = (cnst1 + 0.5 * mach_temp**2 + cnst2)*mach_temp*sin(alfa)
+            ! g flux
+            g(ic, jc, 1) =  mach_continuity * sin(cell_aoa)
+            g(ic, jc, 2) =  mach_continuity**2 * sin(cell_aoa) * cos(cell_aoa)
+            g(ic, jc, 3) = (mach_continuity * sin(cell_aoa))**2 + over_gamma
+            g(ic, jc, 4) = (over_gtgm1 + 0.5 * mach_continuity**2 + over_gamma) * &
+                            mach_continuity * sin(cell_aoa)
         end do
     end do
 

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import scienceplots # pylint: disable=unused-import
 import pandas as pd
 
-res_data = pd.read_csv('../data/res.csv')
+res_data = pd.read_csv('../data/resd.csv')
 
 plt.style.use(['science', 'grid'])
 plt.plot(res_data['iter'], res_data['rho'],   label='$\\rho$')

@@ -1,6 +1,6 @@
 subroutine bcwall()
     use mod_types, only: wp => dp
-    use flowprop,  only: r, u, v, vel, p, E, T, c, s, mach
+    use flowvars,  only: dens, xvel, yvel, vmag, pres, enrg, temp, vsnd, entr, mach
     use reference, only: a_ref, cv_ref, T_ref, R_ref
     use gridprop,  only: ic, ic_max, jc_max
     use gasprop,   only: gamma, gammam1
@@ -28,17 +28,17 @@ subroutine bcwall()
         q(ic, 0, 4) = q(ic, 1, 4)
 
         ! update tracked quantities
-        r(ic, 0) = q(ic, 0, 1)
-        u(ic, 0) = q(ic, 0, 2) / q(ic, 0, 1)
-        v(ic, 0) = q(ic, 0, 3) / q(ic, 0, 1)
-        E(ic, 0) = q(ic, 0, 4) / q(ic, 0, 1)
+        dens(ic, 0) = q(ic, 0, 1)
+        xvel(ic, 0) = q(ic, 0, 2) / q(ic, 0, 1)
+        yvel(ic, 0) = q(ic, 0, 3) / q(ic, 0, 1)
+        enrg(ic, 0) = q(ic, 0, 4) / q(ic, 0, 1)
 
-        vel(ic, 0) = sqrt(u(ic, 0)**2 + v(ic, 0)**2)
-        T(ic, 0) = ((E(ic, 0) * a_ref**2 - 0.5 * (vel(ic, 0) * a_ref)**2) / cv_ref) / T_ref
-        c(ic, 0) = sqrt(gamma * R_ref * T(ic, 0) * T_ref) / a_ref
-        mach(ic, 0) = vel(ic, 0) / c(ic, 0)
-        p(ic, 0) = gammam1 * r(ic, 0) * (E(ic, 0) - 0.5 * vel(ic, 0)**2)
-        s(ic, 0) = p(ic, 0) / r(ic, 0)**gamma
+        vmag(ic, 0) = sqrt(xvel(ic, 0)**2 + yvel(ic, 0)**2)
+        temp(ic, 0) = ((enrg(ic, 0) * a_ref**2 - 0.5 * (vmag(ic, 0) * a_ref)**2) / cv_ref) / T_ref
+        vsnd(ic, 0) = sqrt(gamma * R_ref * temp(ic, 0) * T_ref) / a_ref
+        mach(ic, 0) = vmag(ic, 0) / vsnd(ic, 0)
+        pres(ic, 0) = gammam1 * dens(ic, 0) * (enrg(ic, 0) - 0.5 * vmag(ic, 0)**2)
+        entr(ic, 0) = pres(ic, 0) / dens(ic, 0)**gamma
 
         ! second layer of ghost cells on the bottom
         ! update state vector
@@ -48,17 +48,17 @@ subroutine bcwall()
         q(ic, -1, 4) = q(ic, 2, 4)
 
         ! update tracked quantities
-        r(ic, -1) = q(ic, -1, 1)
-        u(ic, -1) = q(ic, -1, 2) / q(ic, -1, 1)
-        v(ic, -1) = q(ic, -1, 3) / q(ic, -1, 1)
-        E(ic, -1) = q(ic, -1, 4) / q(ic, -1, 1)
+        dens(ic, -1) = q(ic, -1, 1)
+        xvel(ic, -1) = q(ic, -1, 2) / q(ic, -1, 1)
+        yvel(ic, -1) = q(ic, -1, 3) / q(ic, -1, 1)
+        enrg(ic, -1) = q(ic, -1, 4) / q(ic, -1, 1)
 
-        vel(ic, -1) = sqrt(u(ic, -1)**2 + v(ic, -1)**2)
-        T(ic, -1) = ((E(ic, -1) * a_ref**2 - 0.5 * (vel(ic, -1) * a_ref)**2) / cv_ref) / T_ref
-        c(ic, -1) = sqrt(gamma * R_ref * T(ic, -1) * T_ref) / a_ref
-        mach(ic, -1) = vel(ic, -1) / c(ic, -1)
-        p(ic, -1) = gammam1 * r(ic, -1) * (E(ic, -1) - 0.5 * vel(ic, -1)**2)
-        s(ic, -1) = p(ic, -1) / r(ic, -1)**gamma
+        vmag(ic, -1) = sqrt(xvel(ic, -1)**2 + yvel(ic, -1)**2)
+        temp(ic, -1) = ((enrg(ic, -1) * a_ref**2 - 0.5 * (vmag(ic, -1) * a_ref)**2) / cv_ref) / T_ref
+        vsnd(ic, -1) = sqrt(gamma * R_ref * temp(ic, -1) * T_ref) / a_ref
+        mach(ic, -1) = vmag(ic, -1) / vsnd(ic, -1)
+        pres(ic, -1) = gammam1 * dens(ic, -1) * (enrg(ic, -1) - 0.5 * vmag(ic, -1)**2)
+        entr(ic, -1) = pres(ic, -1) / dens(ic, -1)**gamma
 
         ! bottom facing normal of ghost cells on top wall
         ns = normal(ic, jc_max+1, 2)
@@ -73,17 +73,17 @@ subroutine bcwall()
         q(ic, jc_max+1, 4) = q(ic, jc_max, 4)
 
         ! update tracked quantities
-        r(ic, jc_max+1) = q(ic, jc_max+1, 1)
-        u(ic, jc_max+1) = q(ic, jc_max+1, 2) / q(ic, jc_max+1, 1)
-        v(ic, jc_max+1) = q(ic, jc_max+1, 3) / q(ic, jc_max+1, 1)
-        E(ic, jc_max+1) = q(ic, jc_max+1, 4) / q(ic, jc_max+1, 1)
+        dens(ic, jc_max+1) = q(ic, jc_max+1, 1)
+        xvel(ic, jc_max+1) = q(ic, jc_max+1, 2) / q(ic, jc_max+1, 1)
+        yvel(ic, jc_max+1) = q(ic, jc_max+1, 3) / q(ic, jc_max+1, 1)
+        enrg(ic, jc_max+1) = q(ic, jc_max+1, 4) / q(ic, jc_max+1, 1)
 
-        vel(ic, jc_max+1) = sqrt(u(ic, jc_max+1)**2 + v(ic, jc_max+1)**2)
-        T(ic, jc_max+1) = ((E(ic, jc_max+1) * a_ref**2 - 0.5 * (vel(ic, jc_max+1) * a_ref)**2) / cv_ref) / T_ref
-        c(ic, jc_max+1) = sqrt(gamma * R_ref * T(ic, jc_max+1) * T_ref) / a_ref
-        mach(ic, jc_max+1) = vel(ic, jc_max+1) / c(ic, jc_max+1)
-        p(ic, jc_max+1) = gammam1 * r(ic, jc_max+1) * (E(ic, jc_max+1) - 0.5 * vel(ic, jc_max+1)**2)
-        s(ic, jc_max+1) = p(ic, jc_max+1) / r(ic, jc_max+1)**gamma
+        vmag(ic, jc_max+1) = sqrt(xvel(ic, jc_max+1)**2 + yvel(ic, jc_max+1)**2)
+        temp(ic, jc_max+1) = ((enrg(ic, jc_max+1) * a_ref**2 - 0.5 * (vmag(ic, jc_max+1) * a_ref)**2) / cv_ref) / T_ref
+        vsnd(ic, jc_max+1) = sqrt(gamma * R_ref * temp(ic, jc_max+1) * T_ref) / a_ref
+        mach(ic, jc_max+1) = vmag(ic, jc_max+1) / vsnd(ic, jc_max+1)
+        pres(ic, jc_max+1) = gammam1 * dens(ic, jc_max+1) * (enrg(ic, jc_max+1) - 0.5 * vmag(ic, jc_max+1)**2)
+        entr(ic, jc_max+1) = pres(ic, jc_max+1) / dens(ic, jc_max+1)**gamma
 
         ! second layer of ghost cells on the top
         ! update state vector
@@ -93,16 +93,16 @@ subroutine bcwall()
         q(ic, jc_max+2, 4) = q(ic, jc_max-1, 4)
 
         ! update tracked quantities
-        r(ic, jc_max+2) = q(ic, jc_max+2, 1)
-        u(ic, jc_max+2) = q(ic, jc_max+2, 2) / q(ic, jc_max+2, 1)
-        v(ic, jc_max+2) = q(ic, jc_max+2, 3) / q(ic, jc_max+2, 1)
-        E(ic, jc_max+2) = q(ic, jc_max+2, 4) / q(ic, jc_max+2, 1)
+        dens(ic, jc_max+2) = q(ic, jc_max+2, 1)
+        xvel(ic, jc_max+2) = q(ic, jc_max+2, 2) / q(ic, jc_max+2, 1)
+        yvel(ic, jc_max+2) = q(ic, jc_max+2, 3) / q(ic, jc_max+2, 1)
+        enrg(ic, jc_max+2) = q(ic, jc_max+2, 4) / q(ic, jc_max+2, 1)
 
-        vel(ic, jc_max+2) = sqrt(u(ic, jc_max+2)**2 + v(ic, jc_max+2)**2)
-        T(ic, jc_max+2) = ((E(ic, jc_max+2) * a_ref**2 - 0.5 * (vel(ic, jc_max+2) * a_ref)**2) / cv_ref) / T_ref
-        c(ic, jc_max+2) = sqrt(gamma * R_ref * T(ic, jc_max+2) * T_ref) / a_ref
-        mach(ic, jc_max+2) = vel(ic, jc_max+2) / c(ic, jc_max+2)
-        p(ic, jc_max+2) = gammam1 * r(ic, jc_max+2) * (E(ic, jc_max+2) - 0.5 * vel(ic, jc_max+2)**2)
-        s(ic, jc_max+2) = p(ic, jc_max+2) / r(ic, jc_max+2)**gamma
+        vmag(ic, jc_max+2) = sqrt(xvel(ic, jc_max+2)**2 + yvel(ic, jc_max+2)**2)
+        temp(ic, jc_max+2) = ((enrg(ic, jc_max+2) * a_ref**2 - 0.5 * (vmag(ic, jc_max+2) * a_ref)**2) / cv_ref) / T_ref
+        vsnd(ic, jc_max+2) = sqrt(gamma * R_ref * temp(ic, jc_max+2) * T_ref) / a_ref
+        mach(ic, jc_max+2) = vmag(ic, jc_max+2) / vsnd(ic, jc_max+2)
+        pres(ic, jc_max+2) = gammam1 * dens(ic, jc_max+2) * (enrg(ic, jc_max+2) - 0.5 * vmag(ic, jc_max+2)**2)
+        entr(ic, jc_max+2) = pres(ic, jc_max+2) / dens(ic, jc_max+2)**gamma
     end do
 end subroutine bcwall

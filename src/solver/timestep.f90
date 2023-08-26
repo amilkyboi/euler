@@ -1,7 +1,7 @@
 subroutine timestep()
     use mod_types, only: wp => dp
     use gridprop,  only: ic, jc, ic_max, jc_max, ar, dt_min, dt
-    use flowprop,  only: c, u, v
+    use flowvars,  only: vsnd, xvel, yvel
     use input,     only: cfl    
     use functions
     use timing
@@ -20,10 +20,10 @@ subroutine timestep()
             ne = normal(ic, jc, 3)
             nw = normal(ic, jc, 4)
 
-            eign = abs(u(ic, jc)*nn(1) + v(ic, jc)*nn(2)) + c(ic, jc) ! north
-            eigs = abs(u(ic, jc)*ns(1) + v(ic, jc)*ns(2)) + c(ic, jc) ! south
-            eige = abs(u(ic, jc)*ne(1) + v(ic, jc)*ne(2)) + c(ic, jc) ! east
-            eigw = abs(u(ic, jc)*nw(1) + v(ic, jc)*nw(2)) + c(ic, jc) ! west
+            eign = abs(xvel(ic, jc)*nn(1) + yvel(ic, jc)*nn(2)) + vsnd(ic, jc) ! north
+            eigs = abs(xvel(ic, jc)*ns(1) + yvel(ic, jc)*ns(2)) + vsnd(ic, jc) ! south
+            eige = abs(xvel(ic, jc)*ne(1) + yvel(ic, jc)*ne(2)) + vsnd(ic, jc) ! east
+            eigw = abs(xvel(ic, jc)*nw(1) + yvel(ic, jc)*nw(2)) + vsnd(ic, jc) ! west
 
             dt(ic, jc) = (2 * ar(ic, jc)) / (eign*length(ic, jc, 1) + &
                           eigs*length(ic, jc, 2) + eige*length(ic, jc, 3) + eigw*length(ic, jc, 4))

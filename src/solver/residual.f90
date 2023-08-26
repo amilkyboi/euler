@@ -13,10 +13,10 @@ subroutine residual()
     do ic = 1, ic_max
         do jc = 1, jc_max
             ! grab the four node locations for each cell
-            an = ijnode(ic, jc, 1)
-            bn = ijnode(ic, jc, 2)
-            cn = ijnode(ic, jc, 3)
-            dn = ijnode(ic, jc, 4)
+            an = ijcell_to_ijnode(ic, jc, 1)
+            bn = ijcell_to_ijnode(ic, jc, 2)
+            cn = ijcell_to_ijnode(ic, jc, 3)
+            dn = ijcell_to_ijnode(ic, jc, 4)
 
             res(ic, jc, :) = 0.5 * ((f(ic, jc, :) + f(ic+1, jc, :)) * (yn(cn(1), cn(2)) - yn(bn(1), bn(2))) &
                            -        (g(ic, jc, :) + g(ic+1, jc, :)) * (xn(cn(1), cn(2)) - xn(bn(1), bn(2))) &

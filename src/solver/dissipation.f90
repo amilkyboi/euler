@@ -1,7 +1,7 @@
 subroutine dissipation()
     use mod_types, only: wp => dp
     use gridprop,  only: ic, jc, ic_max, jc_max
-    use flowprop,  only: p, u, v, c
+    use flowvars,  only: pres, xvel, yvel, vsnd
     use input,     only: nu2, nu4
     use fluxes,    only: q, dis
     use functions
@@ -18,11 +18,11 @@ subroutine dissipation()
     ! second-order switches on cells ij
     do ic = 0, ic_max + 1
         do jc = 0, jc_max + 1
-            delta2p_xi = p(ic+1, jc) - 2*p(ic, jc) + p(ic-1, jc)
-            delta2p_et = p(ic, jc+1) - 2*p(ic, jc) + p(ic, jc-1)
+            delta2p_xi = pres(ic+1, jc) - 2*pres(ic, jc) + pres(ic-1, jc)
+            delta2p_et = pres(ic, jc+1) - 2*pres(ic, jc) + pres(ic, jc-1)
 
-            s2c_xi(ic, jc) = (nu2*abs(delta2p_xi))/(p(ic+1, jc) + 2*p(ic, jc) + p(ic-1, jc))
-            s2c_et(ic, jc) = (nu2*abs(delta2p_et))/(p(ic+1, jc) + 2*p(ic, jc) + p(ic-1, jc))
+            s2c_xi(ic, jc) = (nu2*abs(delta2p_xi))/(pres(ic+1, jc) + 2*pres(ic, jc) + pres(ic-1, jc))
+            s2c_et(ic, jc) = (nu2*abs(delta2p_et))/(pres(ic+1, jc) + 2*pres(ic, jc) + pres(ic-1, jc))
         end do
     end do
 
@@ -50,10 +50,10 @@ subroutine dissipation()
             ne = normal(ic, jc, 3) ! east
             nw = normal(ic, jc, 4) ! west
 
-            eigf(ic, jc, 1) = abs(u(ic, jc)*nn(1) + v(ic, jc)*nn(2)) + c(ic, jc) ! north
-            eigf(ic, jc, 2) = abs(u(ic, jc)*ns(1) + v(ic, jc)*ns(2)) + c(ic, jc) ! south
-            eigf(ic, jc, 3) = abs(u(ic, jc)*ne(1) + v(ic, jc)*ne(2)) + c(ic, jc) ! east
-            eigf(ic, jc, 4) = abs(u(ic, jc)*nw(1) + v(ic, jc)*nw(2)) + c(ic, jc) ! west
+            eigf(ic, jc, 1) = abs(xvel(ic, jc)*nn(1) + yvel(ic, jc)*nn(2)) + vsnd(ic, jc) ! north
+            eigf(ic, jc, 2) = abs(xvel(ic, jc)*ns(1) + yvel(ic, jc)*ns(2)) + vsnd(ic, jc) ! south
+            eigf(ic, jc, 3) = abs(xvel(ic, jc)*ne(1) + yvel(ic, jc)*ne(2)) + vsnd(ic, jc) ! east
+            eigf(ic, jc, 4) = abs(xvel(ic, jc)*nw(1) + yvel(ic, jc)*nw(2)) + vsnd(ic, jc) ! west
         end do
     end do
 

@@ -7,23 +7,25 @@ subroutine area()
 
     ! finds the area of each cell, including ghost cells
 
-    ! used to store (in, jn) locations
-    integer :: an(2), bn(2), cn(2), dn(2)
+    ! used to store node locations (in, jn)
+    integer :: node_a(2), node_b(2), node_c(2), node_d(2)
 
     call system_clock(start, rate)
 
     ! loop over all cells, including ghost cells
-    do ic = 1, ic_max
-        do jc = 1, jc_max
-            ! convert from cell notation to node notation
-            an = ijnode(ic, jc, 1)
-            bn = ijnode(ic, jc, 2)
-            cn = ijnode(ic, jc, 3)
-            dn = ijnode(ic, jc, 4)
+    do ic = -1, ic_max + 2
+        do jc = -1, jc_max + 2
+            ! convert from cell notation (ic, jc) to node notation (in, jn)
+            node_a = ijcell_to_ijnode(ic, jc, 1)
+            node_b = ijcell_to_ijnode(ic, jc, 2)
+            node_c = ijcell_to_ijnode(ic, jc, 3)
+            node_d = ijcell_to_ijnode(ic, jc, 4)
 
             ! simple area formula using the cross product of the two distance vectors
-            ar(ic, jc) = 0.5*((xn(cn(1), cn(2)) - xn(an(1), an(2)))*(yn(dn(1), dn(2)) - yn(bn(1), bn(2))) - &
-                              (xn(dn(1), dn(2)) - xn(bn(1), bn(2)))*(yn(cn(1), cn(2)) - yn(an(1), an(2))))
+            ar(ic, jc) = 0.5 * ((xn(node_c(1), node_c(2)) - xn(node_a(1), node_a(2))) * &
+                                (yn(node_d(1), node_d(2)) - yn(node_b(1), node_b(2))) - &
+                                (xn(node_d(1), node_d(2)) - xn(node_b(1), node_b(2))) * &
+                                (yn(node_c(1), node_c(2)) - yn(node_a(1), node_a(2))))
         end do
     end do
 

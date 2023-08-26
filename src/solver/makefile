@@ -27,7 +27,7 @@ EXE = main
 .SUFFIXES: .f90 .o
 
 # source files, must be placed in order of variable use
-SRC = mod_types.f90 input.f90 timing.f90 gasprop.f90 freestream.f90 reference.f90 gridprop.f90 flowprop.f90 fluxes.f90 functions.f90 \
+SRC = mod_types.f90 input.f90 timing.f90 gasprop.f90 freestream.f90 reference.f90 gridprop.f90 flowvars.f90 fluxes.f90 functions.f90 \
  	  startup.f90 allocation.f90 ghost.f90 area.f90 initializer.f90 bcwall.f90 bcinout.f90 flux.f90 residual.f90 dissipation.f90 \
 	  timestep.f90 rk4.f90 plt.f90 main.f90
 

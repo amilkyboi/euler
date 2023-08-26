@@ -9,5 +9,5 @@ module gridprop
     ! minimum time step
     real(wp) :: dt_min
     ! node x-locations, node y-locations, cell area, cell angle of attack
-    real(wp), allocatable :: xn(:, :), yn(:, :), ar(:, :), alpha(:, :), dt(:, :)
+    real(wp), allocatable :: xn(:, :), yn(:, :), ar(:, :), dt(:, :)
 end module gridprop

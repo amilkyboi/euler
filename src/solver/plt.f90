@@ -1,7 +1,7 @@
 subroutine plt()
    use gridprop, only: in, jn, ic, jc, in_max, jn_max, ic_max, jc_max, xn, yn
    use input,    only: plt_str
-   use flowprop, only: mach
+   use flowvars, only: mach
    use fluxes,   only: q
    use mod_types, only: wp => dp
    use timing
