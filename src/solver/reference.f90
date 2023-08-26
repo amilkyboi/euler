@@ -1,6 +1,6 @@
 module reference
     use mod_types, only: wp => dp
-    use gasprop,   only: gamma, gammam1
+    use gas_vars,   only: gamma, gammam1
     implicit none
 
     ! Declares all variables that serve as standard reference values for non-dimensionalization and

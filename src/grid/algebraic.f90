@@ -1,6 +1,6 @@
 subroutine algebraic()
     use mod_types, only: wp => dp
-    use gridprop,  only: xi, et, xn, yn, in, jn, yn_min, yn_max, fn_beg, fn_end
+    use grid_vars,  only: xi, et, xn, yn, in, jn, yn_min, yn_max, fn_beg, fn_end
     use input,     only: in_max, jn_max, x_bounds, y_bounds, fn_bounds, save_alg, alg_path
     use functions
     use timing

@@ -1,4 +1,4 @@
-module fluxes
+module flux_vars
     use mod_types, only: wp => dp
     implicit none
 
@@ -7,4 +7,4 @@ module fluxes
     ! cell state vector, cell f flux, cell g flux, cell residual, cell dissipation
     real(wp), allocatable :: q(:, :, :), f(:, :, :), g(:, :, :), res(:, :, :), dis(:, :, :)
 
-end module fluxes
+end module flux_vars

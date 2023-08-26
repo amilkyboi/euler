@@ -1,7 +1,7 @@
 module functions
     use mod_types, only: wp => dp
-    use gasprop,   only: gammam1
-    use gridprop,  only: xn, yn
+    use gas_vars,   only: gammam1
+    use grid_vars,  only: xn, yn
     implicit none
 
     contains

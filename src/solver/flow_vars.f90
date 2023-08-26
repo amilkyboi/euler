@@ -1,4 +1,4 @@
-module flowvars
+module flow_vars
     use mod_types, only: wp => dp
     implicit none
 
@@ -8,4 +8,4 @@ module flowvars
     ! static temperature, speed of sound, mach number, static pressure, and specific entropy
     real(wp), allocatable :: dens(:, :), xvel(:, :), yvel(:, :), vmag(:, :), enrg(:, :), &
                              temp(:, :), vsnd(:, :), mach(:, :), pres(:, :), entr(:, :)
-end module flowvars
+end module flow_vars

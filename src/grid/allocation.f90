@@ -1,5 +1,5 @@
 subroutine allocation()
-    use gridprop, only: xi, et, xn, yn
+    use grid_vars, only: xi, et, xn, yn
     use input,    only: in_max, jn_max
     implicit none
 

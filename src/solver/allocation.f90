@@ -1,7 +1,7 @@
 subroutine allocation()
-    use gridprop, only: in_max, jn_max, ic_max, jc_max, ar, dt
-    use flowvars, only: dens, xvel, yvel, vmag, enrg, temp, vsnd, mach, pres, entr
-    use fluxes,   only: q, f, g, res, dis
+    use grid_vars, only: in_max, jn_max, ic_max, jc_max, area, dt
+    use flow_vars, only: dens, xvel, yvel, vmag, enrg, temp, vsnd, mach, pres, entr
+    use flux_vars,   only: q, f, g, res, dis
     use timing
     implicit none
 
@@ -14,7 +14,7 @@ subroutine allocation()
     jc_max = jn_max - 1
 
     ! allocate grid properties
-    allocate(ar(-1:ic_max + 2, -1:jc_max + 2), dt(ic_max, jc_max))
+    allocate(area(-1:ic_max + 2, -1:jc_max + 2), dt(ic_max, jc_max))
     ! allocate state vector and fluxes
     allocate(q(-1:ic_max+2, -1:jc_max+2, 4), f(-1:ic_max+2, -1:jc_max+2, 4), &
              g(-1:ic_max+2, -1:jc_max+2, 4), dis(ic_max, jc_max, 4), &

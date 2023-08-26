@@ -1,9 +1,9 @@
 subroutine flux()
-    use flowvars, only: dens, xvel, yvel, enrg, vmag, pres, temp, vsnd, entr, mach
+    use flow_vars, only: dens, xvel, yvel, enrg, vmag, pres, temp, vsnd, entr, mach
     use reference, only: R_ref, T_ref, a_ref, cv_ref
-    use gridprop,  only: ic, jc, ic_max, jc_max
-    use gasprop,   only: gamma, gammam1
-    use fluxes,    only: q, f, g
+    use grid_vars,  only: ic, jc, ic_max, jc_max
+    use gas_vars,   only: gamma, gammam1
+    use flux_vars,    only: q, f, g
     implicit none
 
     ! Calculates the f and g fluxes based on the state vector values. This is called after each step

@@ -1,6 +1,6 @@
 subroutine elliptic()
     use mod_types, only: wp => dp
-    use gridprop,  only: xi, et, xn, yn, in, jn, yn_min, yn_max, fn_beg, fn_end
+    use grid_vars,  only: xi, et, xn, yn, in, jn, yn_min, yn_max, fn_beg, fn_end
     use input,     only: max_iter, in_max, jn_max, tol, y_bounds, fn_bounds, save_elp, elp_path
     use functions
     use timing

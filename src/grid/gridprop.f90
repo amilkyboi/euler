@@ -1,4 +1,4 @@
-module gridprop
+module grid_vars
     use mod_types, only: wp => dp
     implicit none
 
@@ -10,4 +10,4 @@ module gridprop
     ! domain parameters
     integer(wp) :: yn_min, yn_max, fn_beg, fn_end
 
-end module gridprop
+end module grid_vars

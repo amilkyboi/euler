@@ -1,5 +1,5 @@
-subroutine area()
-    use gridprop,  only: ic, jc, ic_max, jc_max, xn, yn, ar
+subroutine get_area()
+    use grid_vars,  only: ic, jc, ic_max, jc_max, xn, yn, area
     use reference, only: l_ref
     use functions
     use timing
@@ -22,7 +22,7 @@ subroutine area()
             node_d = ijcell_to_ijnode(ic, jc, 4)
 
             ! simple area formula using the cross product of the two distance vectors
-            ar(ic, jc) = 0.5 * ((xn(node_c(1), node_c(2)) - xn(node_a(1), node_a(2))) * &
+            area(ic, jc) = 0.5 * ((xn(node_c(1), node_c(2)) - xn(node_a(1), node_a(2))) * &
                                 (yn(node_d(1), node_d(2)) - yn(node_b(1), node_b(2))) - &
                                 (xn(node_d(1), node_d(2)) - xn(node_b(1), node_b(2))) * &
                                 (yn(node_c(1), node_c(2)) - yn(node_a(1), node_a(2))))
@@ -30,9 +30,9 @@ subroutine area()
     end do
 
     ! non-dimensionalize the entire area vector with respect to the reference length
-    ar = ar / l_ref**2
+    area = area / l_ref**2
 
     call system_clock(end)
     print *, 'subroutine area took ', (end - start) / rate, ' seconds'
 
-end subroutine area
+end subroutine get_area

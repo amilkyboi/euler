@@ -1,8 +1,8 @@
 subroutine rk4()
     use mod_types, only: wp => dp
-    use gridprop,  only: ic, jc, ic_max, jc_max, ar, dt_min
+    use grid_vars,  only: ic, jc, ic_max, jc_max, area, dt_min
     use input,     only: n_iter, res_str
-    use fluxes,    only: q, res, dis
+    use flux_vars,    only: q, res, dis
     use functions
     use timing
     implicit none
@@ -43,7 +43,7 @@ subroutine rk4()
         do i = 1, nstages
             do ic = 1, ic_max
                 do jc = 1, jc_max
-                    q(ic, jc, :) = qold(ic, jc, :) - a_vals(i)*dt_min*(res(ic, jc, :) - dis(ic, jc, :))/ar(ic, jc)
+                    q(ic, jc, :) = qold(ic, jc, :) - a_vals(i)*dt_min*(res(ic, jc, :) - dis(ic, jc, :))/area(ic, jc)
                 end do
             end do
 

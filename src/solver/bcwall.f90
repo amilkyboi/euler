@@ -1,10 +1,10 @@
 subroutine bcwall()
     use mod_types, only: wp => dp
-    use flowvars,  only: dens, xvel, yvel, vmag, pres, enrg, temp, vsnd, entr, mach
+    use flow_vars,  only: dens, xvel, yvel, vmag, pres, enrg, temp, vsnd, entr, mach
     use reference, only: a_ref, cv_ref, T_ref, R_ref
-    use gridprop,  only: ic, ic_max, jc_max
-    use gasprop,   only: gamma, gammam1
-    use fluxes,    only: q
+    use grid_vars,  only: ic, ic_max, jc_max
+    use gas_vars,   only: gamma, gammam1
+    use flux_vars,    only: q
     use functions
     implicit none
 

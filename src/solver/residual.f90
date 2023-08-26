@@ -1,7 +1,7 @@
 subroutine residual()
     use mod_types, only: wp => dp
-    use gridprop,  only: ic, jc, ic_max, jc_max, xn, yn
-    use fluxes,    only: f, g, res
+    use grid_vars,  only: ic, jc, ic_max, jc_max, xn, yn
+    use flux_vars,    only: f, g, res
     use functions
     implicit none
 

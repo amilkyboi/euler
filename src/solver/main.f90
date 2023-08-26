@@ -7,7 +7,7 @@ program main
 
     call ghost
 
-    call area
+    call get_area
 
     call initializer
 

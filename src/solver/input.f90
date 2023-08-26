@@ -1,5 +1,6 @@
 module input
-    use mod_types, only: wp => dp
+    use mod_types,  only: wp => dp
+    use free_vars, only: p_inf
     implicit none
 
     ! maximum number of RK4 iterations
@@ -13,6 +14,8 @@ module input
     real(wp), parameter :: nu4      = 0.002_wp
     ! Courant–Friedrichs–Lewy number
     real(wp), parameter :: cfl      = 1.0_wp
+    ! exit pressure
+    real(wp), parameter :: p_exit   = 0.1_wp * p_inf
 
     ! output file name for saving plots
     character(len=19), parameter :: plt_str = '../../data/soln.plt'

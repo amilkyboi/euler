@@ -1,5 +1,5 @@
 subroutine startup()
-    use gridprop, only: in_max, jn_max, in, jn, xn, yn
+    use grid_vars, only: in_max, jn_max, in, jn, xn, yn
     use timing
     implicit none
 
