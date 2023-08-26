@@ -1,10 +1,8 @@
 subroutine rk4()
     use mod_types, only: wp => dp
     use gridprop,  only: ic, jc, ic_max, jc_max, ar, dt_min
-    use flowprop,  only: p
-    use input,     only: n_iter, res_str, frc_str
+    use input,     only: n_iter, res_str
     use fluxes,    only: q, res, dis
-    use reference, only: l_ref
     use functions
     use timing
     implicit none
@@ -15,7 +13,7 @@ subroutine rk4()
     ! applied to the state vector to update it in time.
 
     integer :: iter, nstages, i
-    real(wp) :: a_vals(4), err, nn(2)
+    real(wp) :: a_vals(4), err
     real(wp), allocatable :: qold(:, :, :)
 
     call system_clock(start, rate)

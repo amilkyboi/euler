@@ -18,6 +18,4 @@ module input
     character(len=30), parameter :: plt_str = '../../data/soln.plt'
     ! output file name for saving residual
     character(len=30), parameter :: res_str = '../../data/res.csv'
-    ! output file name for saving force
-    character(len=30), parameter :: frc_str = '../../data/force.csv'
 end module input

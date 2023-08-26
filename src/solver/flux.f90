@@ -1,5 +1,4 @@
 subroutine flux()
-    use mod_types, only: wp => dp
     use flowprop, only: r, u, v, E, vel, p, T, c, s, mach
     use reference, only: R_ref, T_ref, a_ref, cv_ref
     use gridprop,  only: ic, jc, ic_max, jc_max

@@ -8,7 +8,7 @@ subroutine residual()
     ! Calculates the residual term of the main equation using the f and g fluxes on the four faces
     ! of each cell.
 
-    integer :: an(2), bn(2), cn(2), dn(2)
+    integer(wp) :: an(2), bn(2), cn(2), dn(2)
 
     do ic = 1, ic_max
         do jc = 1, jc_max

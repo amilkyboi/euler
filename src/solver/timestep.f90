@@ -1,7 +1,6 @@
 subroutine timestep()
     use mod_types, only: wp => dp
     use gridprop,  only: ic, jc, ic_max, jc_max, ar, dt_min, dt
-    use reference, only: a_ref, l_ref
     use flowprop,  only: c, u, v
     use input,     only: cfl    
     use functions
