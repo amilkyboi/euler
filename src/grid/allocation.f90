@@ -1,4 +1,4 @@
-subroutine allocate()
+subroutine allocation()
     use gridprop, only: xi, et, xn, yn
     use input,    only: in_max, jn_max
     implicit none
@@ -11,4 +11,4 @@ subroutine allocate()
     allocate(xn(in_max, jn_max))
     allocate(yn(in_max, jn_max))
 
-end subroutine allocate
+end subroutine allocation

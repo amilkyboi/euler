@@ -27,7 +27,7 @@ EXE = main
 .SUFFIXES: .f90 .o
 
 # source files, must be placed in order of variable use
-SRC = mod_types.f90 input.f90 gridprop.f90 timing.f90 allocate.f90 functions.f90 algebraic.f90 \
+SRC = mod_types.f90 input.f90 gridprop.f90 timing.f90 allocation.f90 functions.f90 algebraic.f90 \
 	  elliptic.f90 main.f90
 
 # compile .f90 files to .o files

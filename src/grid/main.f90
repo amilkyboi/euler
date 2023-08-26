@@ -1,7 +1,7 @@
 program main
     implicit none
 
-    call allocate
+    call allocation
 
     call algebraic
 

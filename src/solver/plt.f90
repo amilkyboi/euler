@@ -21,7 +21,7 @@ subroutine plt()
    end do
 
    open(33, file=plt_str)
-   write(33, *) 'variables = "x", "y", "rho", "rho*u", "rho*v", "rho*E", "mach"'
+   write(33, *) 'variables = "x", "y", "rho", "rho_u", "rho_v", "rho_e", "mach"'
    write(33, *) "zone f=fepoint, et=quadrilateral, n=" , in_max*jn_max, ", e=", ic_max*jc_max
 
    do jn = 1, jn_max

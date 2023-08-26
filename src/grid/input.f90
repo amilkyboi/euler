@@ -24,8 +24,8 @@ module input
     logical, parameter :: save_elp = .true.
 
     ! save location for algebraic grid file
-    character(len=30), parameter :: alg_path = '../../data/xy_alg.x'
+    character(len=19), parameter :: alg_path = '../../data/xy_alg.x'
     ! save location for elliptic grid file
-    character(len=30), parameter :: elp_path = '../../data/xy_elp.x'
+    character(len=19), parameter :: elp_path = '../../data/xy_elp.x'
 
 end module input
