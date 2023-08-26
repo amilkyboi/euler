@@ -1,14 +1,13 @@
 subroutine residual()
-    use mod_types, only: wp => dp
-    use grid_vars,  only: ic, jc, ic_max, jc_max, xn, yn
-    use flux_vars,    only: f, g, res
+    use grid_vars, only: ic, jc, ic_max, jc_max, xn, yn
+    use flux_vars, only: f, g, res
     use functions
     implicit none
 
     ! Calculates the residual term of the main equation using the f and g fluxes on the four faces
     ! of each cell.
 
-    integer(wp) :: an(2), bn(2), cn(2), dn(2)
+    integer :: an(2), bn(2), cn(2), dn(2)
 
     do ic = 1, ic_max
         do jc = 1, jc_max
@@ -28,4 +27,5 @@ subroutine residual()
                            -        (g(ic, jc, :) + g(ic, jc-1, :)) * (xn(bn(1), bn(2)) - xn(an(1), an(2))))
         end do
     end do
+
 end subroutine residual

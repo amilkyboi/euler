@@ -1,12 +1,12 @@
 subroutine bcinout()
-    use mod_types,  only: wp => dp
-    use flow_vars,   only: dens, pres, xvel, yvel, vmag, vsnd, entr, enrg, temp, mach
+    use mod_types, only: wp => dp
+    use flow_vars, only: dens, pres, xvel, yvel, vmag, vsnd, entr, enrg, temp, mach
+    use reference, only: a_ref, cv_ref, T_ref
+    use grid_vars, only: jc, ic_max, jc_max
     use free_vars, only: p_inf, riem1_inf
-    use reference,  only: a_ref, cv_ref, T_ref
-    use grid_vars,   only: jc, ic_max, jc_max
-    use gas_vars,    only: gamma, gammam1
-    use input,      only: mach_inf
-    use flux_vars,     only: q
+    use gas_vars,  only: gamma, gammam1
+    use input,     only: mach_inf
+    use flux_vars, only: q
     use functions
     implicit none
 

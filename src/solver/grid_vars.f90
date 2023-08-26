@@ -11,4 +11,5 @@ module grid_vars
     real(wp), allocatable :: xn(:, :), yn(:, :), area(:, :), dt(:, :)
     ! minimum time step
     real(wp) :: dt_min
+
 end module grid_vars

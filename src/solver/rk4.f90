@@ -1,8 +1,8 @@
 subroutine rk4()
     use mod_types, only: wp => dp
-    use grid_vars,  only: ic, jc, ic_max, jc_max, area, dt_min
+    use grid_vars, only: ic, jc, ic_max, jc_max, area, dt_min
     use input,     only: n_iter, res_str
-    use flux_vars,    only: q, res, dis
+    use flux_vars, only: q, res, dis
     use functions
     use timing
     implicit none

@@ -9,4 +9,5 @@ module free_vars
     real(wp), parameter :: p_inf = 1.0_wp / gamma
     ! freestream x-velocity, freestream y-velocity, freestream Riemann1 invariant
     real(wp) :: u_inf, v_inf, riem1_inf
+
 end module free_vars

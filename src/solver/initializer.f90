@@ -1,11 +1,11 @@
 subroutine initializer()
-    use mod_types,  only: wp => dp
-    use grid_vars,   only: ic_max, jc_max, ic, jc, xn, yn
-    use flow_vars,   only: dens, pres, temp, enrg, vsnd, entr, xvel, yvel, vmag, mach
-    use reference,  only: a_ref, R_ref, T_ref, cv_ref
-    use gas_vars,    only: gamma, gammam1, over_gamma, over_gtgm1
-    use input,      only: mach_inf
-    use flux_vars,     only: q, f, g
+    use mod_types, only: wp => dp
+    use flow_vars, only: dens, pres, temp, enrg, vsnd, entr, xvel, yvel, vmag, mach
+    use gas_vars,  only: gamma, gammam1, over_gamma, over_gtgm1
+    use grid_vars, only: ic_max, jc_max, ic, jc, xn, yn
+    use reference, only: a_ref, R_ref, T_ref, cv_ref
+    use input,     only: mach_inf
+    use flux_vars, only: q, f, g
     use functions
     use timing
     implicit none
@@ -13,7 +13,7 @@ subroutine initializer()
     ! initializes the state vector and the two flux vectors in each cell
 
     ! used to store node locations (in, jn)
-    integer(wp) :: node_a(2), node_b(2), node_c(2), node_d(2)
+    integer :: node_a(2), node_b(2), node_c(2), node_d(2)
     ! various temporary variables for calculating continuity throughout the domain
     real(wp) :: mach_continuity, cell_aoa, inlet_height, current_avg_domain_height
 

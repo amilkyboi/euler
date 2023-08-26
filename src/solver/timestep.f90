@@ -1,7 +1,7 @@
 subroutine timestep()
     use mod_types, only: wp => dp
-    use grid_vars,  only: ic, jc, ic_max, jc_max, area, dt_min, dt
-    use flow_vars,  only: vsnd, xvel, yvel
+    use grid_vars, only: ic, jc, ic_max, jc_max, area, dt_min, dt
+    use flow_vars, only: vsnd, xvel, yvel
     use input,     only: cfl    
     use functions
     use timing
@@ -25,8 +25,11 @@ subroutine timestep()
             eige = abs(xvel(ic, jc)*ne(1) + yvel(ic, jc)*ne(2)) + vsnd(ic, jc) ! east
             eigw = abs(xvel(ic, jc)*nw(1) + yvel(ic, jc)*nw(2)) + vsnd(ic, jc) ! west
 
-            dt(ic, jc) = (2 * area(ic, jc)) / (eign*length(ic, jc, 1) + &
-                          eigs*length(ic, jc, 2) + eige*length(ic, jc, 3) + eigw*length(ic, jc, 4))
+            dt(ic, jc) = (2 * area(ic, jc)) / &
+                         (eign*length(ic, jc, 1) + &
+                          eigs*length(ic, jc, 2) + &
+                          eige*length(ic, jc, 3) + &
+                          eigw*length(ic, jc, 4))
         end do
     end do
 

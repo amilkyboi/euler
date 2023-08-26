@@ -1,9 +1,9 @@
 subroutine dissipation()
     use mod_types, only: wp => dp
-    use grid_vars,  only: ic, jc, ic_max, jc_max
-    use flow_vars,  only: pres, xvel, yvel, vsnd
+    use grid_vars, only: ic, jc, ic_max, jc_max
+    use flow_vars, only: pres, xvel, yvel, vsnd
     use input,     only: nu2, nu4
-    use flux_vars,    only: q, dis
+    use flux_vars, only: q, dis
     use functions
     implicit none
 

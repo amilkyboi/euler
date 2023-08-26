@@ -1,14 +1,15 @@
 subroutine plt()
-   use grid_vars, only: in, jn, ic, jc, in_max, jn_max, ic_max, jc_max, xn, yn
-   use input,    only: plt_str
-   use flow_vars, only: mach
-   use flux_vars,   only: q
    use mod_types, only: wp => dp
+   use grid_vars, only: in, jn, ic, jc, in_max, jn_max, ic_max, jc_max, xn, yn
+   use input,     only: plt_str
+   use flow_vars, only: mach
+   use flux_vars, only: q
    use timing
    implicit none
 
    integer :: i1, i2, i3, i4
    real(wp), allocatable :: qn(:, :, :), mn(:, :)
+
    call system_clock(start, rate)
 
    allocate(qn(in_max, jn_max, 4), mn(in_max, jn_max))

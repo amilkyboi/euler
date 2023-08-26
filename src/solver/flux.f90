@@ -1,21 +1,25 @@
 subroutine flux()
     use flow_vars, only: dens, xvel, yvel, enrg, vmag, pres, temp, vsnd, entr, mach
     use reference, only: R_ref, T_ref, a_ref, cv_ref
-    use grid_vars,  only: ic, jc, ic_max, jc_max
-    use gas_vars,   only: gamma, gammam1
-    use flux_vars,    only: q, f, g
+    use grid_vars, only: ic, jc, ic_max, jc_max
+    use gas_vars,  only: gamma, gammam1
+    use flux_vars, only: q, f, g
     implicit none
 
-    ! Calculates the f and g fluxes based on the state vector values. This is called after each step
-    ! of the Runge-Kutta method to update the solution.
+    ! calculates the f and g fluxes based on the state vector values
+
+    ! TODO: see about accessing more variables directly from the state vector instead of going
+    !       through the flow property arrays
 
     do ic = -1, ic_max + 2
         do jc = -1, jc_max + 2
-            ! update flow properties
+            ! first update flow properties directly with the current state vector
             dens(ic, jc) = q(ic, jc, 1)
             xvel(ic, jc) = q(ic, jc, 2) / q(ic, jc, 1)
             yvel(ic, jc) = q(ic, jc, 3) / q(ic, jc, 1)
             enrg(ic, jc) = q(ic, jc, 4) / q(ic, jc, 1)
+
+            ! other properties follow
             vmag(ic, jc) = sqrt(xvel(ic, jc)**2 + yvel(ic, jc)**2)
             pres(ic, jc) = gammam1 * dens(ic, jc) * (enrg(ic, jc) - 0.5 * vmag(ic, jc)**2)
             temp(ic, jc) = ((enrg(ic, jc) * a_ref**2 - 0.5 * (vmag(ic, jc) * a_ref)**2) / cv_ref) / T_ref
@@ -23,12 +27,13 @@ subroutine flux()
             entr(ic, jc) = pres(ic, jc) / dens(ic, jc)**gamma
             mach(ic, jc) = vmag(ic, jc) / vsnd(ic, jc)
 
-            ! update fluxes
+            ! update f flux
             f(ic, jc, 1) =  q(ic, jc, 2)
             f(ic, jc, 2) = (q(ic, jc, 2)**2 / q(ic, jc, 1)) + pres(ic, jc)
             f(ic, jc, 3) = (q(ic, jc, 2) * q(ic, jc, 3)) / q(ic, jc, 1)
             f(ic, jc, 4) = (q(ic, jc, 4) + pres(ic, jc)) * (q(ic, jc, 2) / q(ic, jc, 1))
 
+            ! update g flux
             g(ic, jc, 1) =  q(ic, jc, 3)
             g(ic, jc, 2) = (q(ic, jc, 3) * q(ic, jc, 2)) / q(ic, jc, 1)
             g(ic, jc, 3) = (q(ic, jc, 3)**2 / q(ic, jc, 1)) + pres(ic, jc)

@@ -4,7 +4,7 @@ module input
     implicit none
 
     ! maximum number of RK4 iterations
-    integer(wp), parameter :: n_iter = 5000
+    integer, parameter :: n_iter = 5000
 
     ! freestream mach number
     real(wp), parameter :: mach_inf = 0.3_wp
