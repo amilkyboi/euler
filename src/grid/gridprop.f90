@@ -2,12 +2,12 @@ module gridprop
     use mod_types, only: wp => dp
     implicit none
 
-    ! arrays
-    real(wp), allocatable :: xn(:, :), yn(:, :), xi(:, :), et(:, :)
+    ! grid arrays
+    real(wp), allocatable :: xi(:, :), et(:, :), xn(:, :), yn(:, :)
 
-    ! nodes
+    ! node counters
     integer(wp) :: in, jn
-    ! domain
+    ! domain parameters
     integer(wp) :: yn_min, yn_max, fn_beg, fn_end
 
 end module gridprop

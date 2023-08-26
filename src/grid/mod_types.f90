@@ -1,5 +1,5 @@
 module mod_types
-    use iso_fortran_env, only:  real32, real64, input_unit, output_unit, error_unit
+    use iso_fortran_env, only: real32, real64, input_unit, output_unit, error_unit
     implicit none
 
     integer, parameter :: sp     = real32

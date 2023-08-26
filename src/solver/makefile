@@ -17,7 +17,7 @@ endif
 DBUG_FLAGS = -Og -g3 -Wall -Wextra -pedantic -std=f2018 -fimplicit-none -fcheck=all -fbacktrace -ffpe-trap=invalid,zero,underflow,overflow
 
 # compiler and linker flags used for production
-PROD_FLAGS = -O3 -std=f2018
+PROD_FLAGS = -O3 -std=f2018 -fimplicit-none
 
 # specify fortran compiler and executable filename
 FC  = gfortran
@@ -44,12 +44,12 @@ $(EXE): $(OBJ)
 # debug mode
 dbug: FFLAGS  = $(DBUG_FLAGS)
 dbug: LDFLAGS = $(DBUG_FLAGS)
-dbug: $(EXE) clean
+dbug: clean $(EXE)
 
 # production mode
 prod: FFLAGS  = $(PROD_FLAGS)
 prod: LDFLAGS = $(PROD_FLAGS)
-prod: $(EXE) clean
+prod: clean $(EXE)
 
 # clean option
 clean:
