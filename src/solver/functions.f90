@@ -84,19 +84,19 @@ module functions
         node_d = ijcell_to_ijnode(ic, jc, 4)
 
         if (dir == 1) then
-            ! North
+            ! north face
             normal = [(yn(node_d(1), node_d(2)) - yn(node_c(1), node_c(2))) / length(ic, jc, dir), &
                      -(xn(node_d(1), node_d(2)) - xn(node_c(1), node_c(2))) / length(ic, jc, dir)]
         else if (dir == 2) then
-            ! South
+            ! south face
             normal = [(yn(node_b(1), node_b(2)) - yn(node_a(1), node_a(2))) / length(ic, jc, dir), &
                      -(xn(node_b(1), node_b(2)) - xn(node_a(1), node_a(2))) / length(ic, jc, dir)]
         else if (dir == 3) then
-            ! East
+            ! east face
             normal = [(yn(node_c(1), node_c(2)) - yn(node_b(1), node_b(2))) / length(ic, jc, dir), &
                      -(xn(node_c(1), node_c(2)) - xn(node_b(1), node_b(2))) / length(ic, jc, dir)]
         else if (dir == 4) then
-            ! West
+            ! west face
             normal = [(yn(node_a(1), node_a(2)) - yn(node_d(1), node_d(2))) / length(ic, jc, dir), &
                      -(xn(node_a(1), node_a(2)) - xn(node_d(1), node_d(2))) / length(ic, jc, dir)]
         else

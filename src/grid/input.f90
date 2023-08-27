@@ -7,7 +7,7 @@ module input
     ! maximum number of nodes in the x-direction
     integer(wp), parameter :: in_max   = 51
     ! maximum number of nodes in the y-direction
-    integer(wp), parameter :: jn_max   = 11
+    integer(wp), parameter :: jn_max   = 21
 
     ! tolerance for the elliptic Gauss-Seidel method
     real(wp), parameter :: tol          = 10e-10
