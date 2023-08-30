@@ -8,6 +8,7 @@ import scienceplots # pylint: disable=unused-import
 import pandas as pd
 
 res_data = pd.read_csv('../data/res.csv')
+frc_data = pd.read_csv('../data/frc.csv')
 
 plt.style.use(['science', 'grid'])
 
@@ -27,4 +28,12 @@ plt.xlabel('Iteration Number')
 plt.ylabel('Residual')
 plt.legend()
 
+plt.show()
+
+plt.plot(frc_data['dist'], frc_data['fp_x'], label='$F_{px}$')
+plt.plot(frc_data['dist'], frc_data['fp_y'], label='$F_{py}$')
+plt.title('Pressure Force on the Bottom Wall')
+plt.xlabel('$x$-distance')
+plt.ylabel('Pressure Force')
+plt.legend()
 plt.show()

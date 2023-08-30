@@ -1,8 +1,10 @@
 subroutine rk4()
     use mod_types, only: wp => dp
     use grid_vars, only: ic, jc, ic_max, jc_max, area, dt_min
-    use input,     only: max_iter, res_str, res_tol
+    use input,     only: max_iter, res_tol, res_str, frc_str
     use flux_vars, only: q, res, dis
+    use reference, only: l_ref
+    use flow_vars, only: pres
     use functions
     use timing
     implicit none
@@ -14,10 +16,11 @@ subroutine rk4()
     integer :: iter, n_stages, stage
 
     ! multiplicative constants for the modified Runge-Kutta algorithm, error is the difference
-    ! between the current and previous density residual
-    real(wp) :: a_vals(4)
+    ! between the current and previous density residual, north-facing normal
+    real(wp) :: a_vals(4), nn(2)
     ! temporary state vector storage for the RK4 algorithm and error analysis
-    real(wp), allocatable :: q_old(:, :, :), res_dis_old(:, :, :), res_dis_err(:, :, :)
+    real(wp), allocatable :: q_old(:, :, :), res_dis_old(:, :, :), res_dis_err(:, :, :), fp_x(:), &
+                             fp_y(:)
 
     call system_clock(start, rate)
 
@@ -25,6 +28,8 @@ subroutine rk4()
     allocate(q_old(ic_max, jc_max, 4))
     allocate(res_dis_old(ic_max, jc_max, 4))
     allocate(res_dis_err(ic_max, jc_max, 4))
+    allocate(fp_x(ic_max))
+    allocate(fp_y(ic_max))
 
     ! RK constants
     a_vals(1) = 0.25_wp
@@ -102,6 +107,27 @@ subroutine rk4()
     ! apply boundary conditions one final time
     call bcinout
     call bcwall
+
+    open(2, file=frc_str)
+    write(2,'(*(g0.15,:,","))') 'dist', 'fp_x', 'fp_y'
+
+    ! force on the bottom wall
+    ! F_x = -p * dA * n_x
+    ! F_y = -p * dA * n_y
+    ! dA  = len_cell * len_reference
+    do ic = 1, ic_max
+        ! upward pointing normal from the top face of the first bottom ghost cell
+        nn = normal(ic, 0, 1)
+
+        ! note that the magnitude of the force will decrease as the grid is refined since the length
+        ! of each cell will get smaller
+        fp_x(ic) = - pres(ic, 1) * length(ic, 0, 1) * l_ref * nn(1)
+        fp_y(ic) = - pres(ic, 1) * length(ic, 0, 1) * l_ref * nn(2)
+
+        write(2,'(*(g0.15,:,","))') xn(ic, 1), fp_x(ic), fp_y(ic)
+    end do
+
+    close(2)
 
     print *, iter
     print *, maxval(abs(res_dis_err))

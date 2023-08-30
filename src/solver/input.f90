@@ -9,7 +9,7 @@ module input
     ! mach 0.7: nu2 = 0.3_wp, nu4 = 0.003_wp, p_exit = 0.8_wp * p_inf
 
     ! maximum number of RK4 iterations
-    integer, parameter :: max_iter = 45000
+    integer, parameter :: max_iter = 5000
 
     ! freestream mach number
     real(wp), parameter :: mach_inf  = 0.7_wp
@@ -30,5 +30,7 @@ module input
     character(len=19), parameter :: plt_str = '../../data/soln.plt'
     ! output file name for saving residual
     character(len=19), parameter :: res_str = '../../data/res.csv'
+    ! output file name for saving force
+    character(len=19), parameter :: frc_str = '../../data/frc.csv'
 
 end module input
