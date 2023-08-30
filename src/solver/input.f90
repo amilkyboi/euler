@@ -6,7 +6,7 @@ module input
     ! switch & exit pressure values that have worked well in the past for reference
     ! mach 0.3: nu2 = 0.0_wp, nu4 = 0.002_wp, p_exit = 1.0_wp * p_inf
     ! mach 0.5: nu2 = 0.0_wp, nu4 = 0.003_wp, p_exit = 1.0_wp * p_inf
-    ! mach 0.7: nu2 = 0.2_wp, nu4 = 0.003_wp, p_exit = 0.8_wp * p_inf
+    ! mach 0.7: nu2 = 0.3_wp, nu4 = 0.003_wp, p_exit = 0.8_wp * p_inf
 
     ! maximum number of RK4 iterations
     integer, parameter :: max_iter = 45000
@@ -14,7 +14,7 @@ module input
     ! freestream mach number
     real(wp), parameter :: mach_inf  = 0.7_wp
     ! second-order switch magnitude
-    real(wp), parameter :: nu2       = 0.2_wp
+    real(wp), parameter :: nu2       = 0.3_wp
     ! fourth-order switch magnitude
     real(wp), parameter :: nu4       = 0.003_wp
     ! exit pressure

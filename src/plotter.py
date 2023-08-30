@@ -22,7 +22,7 @@ plt.plot(res_data['iter'], res_data['err_rho_v'], label='$\\rho{}v$ Error', line
 plt.plot(res_data['iter'], res_data['err_rho_e'], label='$\\rho{}E$ Error', linestyle='dashdot')
 
 plt.yscale('log')
-plt.title('Residual vs. Iteration Number')
+plt.title('$R_{ij} - D_{ij}$ \\& Respective Error vs. Iteration Number')
 plt.xlabel('Iteration Number')
 plt.ylabel('Residual')
 plt.legend()
