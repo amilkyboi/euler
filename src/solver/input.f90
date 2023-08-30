@@ -9,7 +9,7 @@ module input
     ! mach 0.7: nu2 = 0.3_wp, nu4 = 0.003_wp, p_exit = 0.8_wp * p_inf
 
     ! maximum number of RK4 iterations
-    integer, parameter :: max_iter = 5000
+    integer, parameter :: max_iter = 45000
 
     ! freestream mach number
     real(wp), parameter :: mach_inf  = 0.7_wp
