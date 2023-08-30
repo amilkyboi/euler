@@ -70,6 +70,8 @@ subroutine bcinout()
 
     ! outlet bc's
     do jc = -1, jc_max + 2
+        ! exit bcs using the characteristics approach - sets bcs for ic_max
+
         ! 1. static pressure at i = i_max
 
         ! check if the flow inside the last portion of the domain is supersonic
@@ -82,13 +84,13 @@ subroutine bcinout()
         end if
 
         ! 2. entropy at i = i_max
-        entr(ic_max, jc) = entr(ic_max-1, jc)
+        entr(ic_max, jc) = entr(ic_max - 1, jc)
 
         ! 3. riem1 at i = i_max
-        riem1_1 = vmag(ic_max-1, jc) + (2 * vsnd(ic_max-1, jc)) * over_gamm1
+        riem1_1 = vmag(ic_max - 1, jc) + (2 * vsnd(ic_max - 1, jc)) * over_gamm1
 
         ! 4. y-velocity at i = i_max
-        yvel(ic_max, jc) = yvel(ic_max-1, jc)
+        yvel(ic_max, jc) = yvel(ic_max - 1, jc)
 
         ! 5. other variables at i = i_max
         dens(ic_max, jc) = (pres(ic_max, jc) / entr(ic_max, jc))**over_gamma
@@ -106,13 +108,19 @@ subroutine bcinout()
         q(ic_max, jc, 3) = dens(ic_max, jc) * yvel(ic_max, jc)
         q(ic_max, jc, 4) = dens(ic_max, jc) * enrg(ic_max, jc)
 
+        ! exit bcs using the zero-gradient approach - sets bcs for ic_max + 1
+
         ! assert the zero-gradient bc (asserts that there is essentially no change in the state
         ! vector between the exit and the first ghost cell)
-
-        ! TODO: this isn't really true, need to explore ways to increase the accuracy here
-        do k = 1, 4
-            q(ic_max + 1, jc, k) = q(ic_max, jc, k)
+        do k = 1, 3
+            q(ic_max + 1, jc, k) = 2 * q(ic_max, jc, k) - q(ic_max - 1, jc, k)
         end do
+
+        ! the energy term is calculated using the appropriate pressure, which was determined in the
+        ! supersonic/subsonic conditional
+        q(ic_max + 1, jc, 4) = pres(ic_max, jc) * over_gamm1 + 0.5 * q(ic_max + 1, jc, 1) * &
+                               vmag(ic_max + 1, jc)**2
+
     end do
 
 end subroutine bcinout
