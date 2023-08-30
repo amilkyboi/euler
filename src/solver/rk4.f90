@@ -15,15 +15,16 @@ subroutine rk4()
 
     ! multiplicative constants for the modified Runge-Kutta algorithm, error is the difference
     ! between the current and previous density residual
-    real(wp) :: a_vals(4), res_err
-    ! temporary state vector storage for error analysis
-    real(wp), allocatable :: q_old(:, :, :), res_old(:, :, :)
+    real(wp) :: a_vals(4)
+    ! temporary state vector storage for the RK4 algorithm and error analysis
+    real(wp), allocatable :: q_old(:, :, :), res_dis_old(:, :, :), res_dis_err(:, :, :)
 
     call system_clock(start, rate)
 
     ! previous state and residual vectors
     allocate(q_old(ic_max, jc_max, 4))
-    allocate(res_old(ic_max, jc_max, 4))
+    allocate(res_dis_old(ic_max, jc_max, 4))
+    allocate(res_dis_err(ic_max, jc_max, 4))
 
     ! RK constants
     a_vals(1) = 0.25_wp
@@ -39,14 +40,16 @@ subroutine rk4()
     call bcwall
     call flux
     call residual
+    call dissipation
 
     ! set previous state and residual vectors
-    q_old   = q
-    res_old = res
+    q_old       = q
+    res_dis_old = res - dis
 
     ! file that contains iteration number and residual quantities for plotting
     open(1, file=res_str)
-    write(1,'(*(g0.15,:,","))') 'iter', 'rho', 'rho_u', 'rho_v', 'rho_e'
+    write(1,'(*(g0.15,:,","))') 'iter', 'rho', 'rho_u', 'rho_v', 'rho_e', 'err_rho', 'err_rho_u', &
+                                'err_rho_v', 'err_rho_e'
 
     do iter = 1, max_iter
 
@@ -69,20 +72,27 @@ subroutine rk4()
 
         end do
 
-        ! maximum error in the residual
-        res_err = maxval(abs(res_old - res))
+        ! track residual minus dissipation as the error quantity of interest
+        res_dis_err = res_dis_old - (res - dis)
 
         ! reset tracking vectors
-        q_old   = q
-        res_old = res
+        q_old       = q
+        res_dis_old = res - dis
 
-        ! write maximum residuals across the entire domain for each quantity
-        write(1,'(*(g0.15,:,","))') iter, maxval(abs(res(:, :, 1))), maxval(abs(res(:, :, 2))), &
-                                          maxval(abs(res(:, :, 3))), maxval(abs(res(:, :, 4)))
+        ! write maximum residuals across the entire domain for each quantity along with the maximum
+        ! error between the current and previous iteration
+        write(1,'(*(g0.15,:,","))') iter, maxval(abs(res(:, :, 1) - dis(:, :, 1))), &
+                                          maxval(abs(res(:, :, 2) - dis(:, :, 2))), &
+                                          maxval(abs(res(:, :, 3) - dis(:, :, 3))), &
+                                          maxval(abs(res(:, :, 4) - dis(:, :, 4))), &
+                                          maxval(abs(res_dis_err(:, :, 1))), &
+                                          maxval(abs(res_dis_err(:, :, 2))), &
+                                          maxval(abs(res_dis_err(:, :, 3))), &
+                                          maxval(abs(res_dis_err(:, :, 4)))
 
         ! if the tolerance threshold is met before the maximum number of iterations is reached, the
         ! algorithm is complete
-        if (res_err <= res_tol) then
+        if (maxval(abs(res_dis_err)) <= res_tol) then
             exit
         end if
     end do
@@ -94,7 +104,7 @@ subroutine rk4()
     call bcwall
 
     print *, iter
-    print *, res_err
+    print *, maxval(abs(res_dis_err))
 
     call system_clock(end)
     print *, 'subroutine rk4 took ', (end - start) / rate, ' seconds'
