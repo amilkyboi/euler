@@ -12,7 +12,9 @@ $\frac{\partial q}{\partial t} + \frac{\partial f}{\partial x} + \frac{\partial 
 
 where the state and flux vectors are written in conservative variable form, i.e.
 
-$q = \begin{Bmatrix} \rho \\ \rho u \\ \rho v \\ \rho E \end{Bmatrix}, \quad f = \begin{Bmatrix} \rho u \\ \rho u^2 + p \\ \rho uv \\ \rho Hu \end{Bmatrix}, \quad\text{and}\quad g = \begin{Bmatrix} \rho \\ \rho uv \\ \rho v^2 + p \\ \rho Hv \end{Bmatrix}.$
+```math
+q = \begin{Bmatrix} \rho \\ \rho u \\ \rho v \\ \rho E \end{Bmatrix}, \quad f = \begin{Bmatrix} \rho u \\ \rho u^2 + p \\ \rho uv \\ \rho Hu \end{Bmatrix}, \quad\text{and}\quad g = \begin{Bmatrix} \rho \\ \rho uv \\ \rho v^2 + p \\ \rho Hv \end{Bmatrix}.
+```
 
 ## Features
 
