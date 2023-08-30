@@ -1,0 +1,7 @@
+# Fortran
+*.mod
+*.o
+*.x
+*.plt
+*.csv
+*.exe
